@@ -56,9 +56,7 @@
          */
         pMatch: function (pattern, str) {
             var result = pattern.exec(str);
-            //console.log('"' + str + '"', str.length, str.charCodeAt(0));
             if (result === null) { return false; }
-            //console.log('"' + str + '"', result, str.length, str.charCodeAt(0));
             return (result[0].length === str.length);
         },
 
@@ -100,22 +98,128 @@
             return chars.join('');
         },
 
+        /**
+         * 英字（全角半角混同）
+         * @param {string} str
+         * @returns {boolean}
+         */
         isAlpha: function(str){
             return F.pMatch(_.patternAlpha, str);
         },
 
+        /**
+         * 数字（全角半角混同）
+         * @param {string} str
+         * @returns {boolean}
+         */
         isNumeric: function(str){
             return F.pMatch(_.patternNumeric, str);
         },
 
+        /**
+         * 英数字（全角半角混同）
+         * @param {string} str
+         * @returns {boolean}
+         */
         isAlphaNumeric: function(str){
             return F.pMatch(_.patternAlphaNumeric, str);
         },
 
+        /**
+         * ASCIIコード
+         * @param {string} str
+         * @returns {boolean}
+         */
+        isAscii: function(str){
+            return F.pMatch(_.patternAscii, str);
+        },
+
+        /**
+         * ひらがな
+         * @param {string} str
+         * @returns {boolean}
+         */
+        isHiragana: function(str){
+            return F.pMatch(_.patternHiragana, str);
+        },
+
+        /**
+         * カタカナ
+         * @param {string} str
+         * @returns {boolean}
+         */
+        isKatakana: function(str){
+            return F.pMatch(_.patternKatanaka, str);
+        },
+
+        /**
+         * 半角カナ
+         * @param {string} str
+         * @returns {boolean}
+         */
+        isHankana: function(str){
+            return F.pMatch(_.patternHanKana, str);
+        },
+
+        /**
+         * 半角
+         * @param {string} str
+         * @returns {boolean}
+         */
+        isHalfWidth: function(str){
+            return F.pMatch(_.patternHalfWidth, str);
+        },
+
+        /**
+         * 全角
+         * @param {string} str
+         * @returns {boolean}
+         */
+        isFullWidth: function(str){
+            return !F.pMatch(_.patternHalfWidth, str);
+        },
+
+        /**
+         * キリル文字
+         * @param {string} str
+         * @returns {boolean}
+         */
+        isCyrillic: function(str){
+            return F.pMatch(_.patternCyrillic, str);
+        },
+
+        /**
+         * 制御コード
+         * @param {string} str
+         * @returns {boolean}
+         */
+        isContralCode: function(str){
+            return F.pMatch(_.patternControlCode, str);
+        },
+
+        /**
+         * 改行コード
+         * @param {string} str
+         * @returns {boolean}
+         */
         isLineBreak: function(str){
             return F.pMatch(_.patternLineBreak, str);
         },
 
+        /**
+         * 改ページコード
+         * @param {string} str
+         * @returns {boolean}
+         */
+        isPageBreak: function(str){
+            return F.pMatch(_.patternPageBreak, str);
+        },
+
+        /**
+         * 空白文字
+         * @param {string} str
+         * @returns {boolean}
+         */
         isBlank: function(str){
             return str.length === 0 || F.pMatch(_.patternBlank, str);
         },
@@ -213,7 +317,6 @@
             }
             return string.split(_.patternLineBreak).join(breakCode);
         }
-
 
     };
 

@@ -1,248 +1,213 @@
-var mozi = new Mozi();
-
-describe('toUnicodeLiteral', function() {
-
-    it('true a', function() {
-        expect(mozi.toUnicodeLiteral('a')).toBeTruthy();
-    });
-
-});
+var unibose = new Unibose();
 
 describe('isAlpha', function() {
 
-    it('true a', function() {
-        expect(mozi.isAlpha('a')).toBeTruthy();
+    it('to be truthy.', function() {
+        expect(unibose.isAlpha('abcZ')).toBeTruthy();
+        expect(unibose.isAlpha('ＡＢＣＺ')).toBeTruthy();
     });
 
-    it('true ABC', function() {
-        expect(mozi.isAlpha('A')).toBeTruthy();
-    });
-
-    it('false 1', function() {
-        expect(mozi.isAlpha('1')).toBeFalsy();
-    });
-
-    it('false 1aA', function() {
-        expect(mozi.isAlpha('1a')).toBeFalsy();
+    it('to be falsy.', function() {
+        expect(unibose.isAlpha('あいう')).toBeFalsy();
+        expect(unibose.isAlpha('1A')).toBeFalsy();
     });
 
 });
 
 describe('isNumeric', function() {
 
-    it('true 1', function() {
-        expect(mozi.isNumeric('1')).toBeTruthy();
+    it('to be truthy.', function() {
+        expect(unibose.isNumeric('012345')).toBeTruthy();
+        expect(unibose.isNumeric('０１２３４５')).toBeTruthy();
     });
 
-    it('true 0123', function() {
-        expect(mozi.isNumeric('0123')).toBeTruthy();
-    });
-
-    it('false A', function() {
-        expect(mozi.isNumeric('A')).toBeFalsy();
-    });
-
-    it('false 1aA', function() {
-        expect(mozi.isNumeric('1aA')).toBeFalsy();
+    it('to be falsy.', function() {
+        expect(unibose.isNumeric('０あ')).toBeFalsy();
+        expect(unibose.isNumeric('1A')).toBeFalsy();
     });
 
 });
 
 describe('isAlphaNumeric', function() {
 
-    it('true a', function() {
-        expect(mozi.isAlphaNumeric('a')).toBeTruthy();
+    it('to be truthy.', function() {
+        expect(unibose.isAlphaNumeric('012ABZ')).toBeTruthy();
+        expect(unibose.isAlphaNumeric('０１２a４５Ｚ')).toBeTruthy();
     });
 
-    it('true A', function() {
-        expect(mozi.isAlphaNumeric('AB1')).toBeTruthy();
+    it('to be falsy.', function() {
+        expect(unibose.isAlphaNumeric('０あ')).toBeFalsy();
+        expect(unibose.isAlphaNumeric('1A_')).toBeFalsy();
     });
 
-    it('false あ', function() {
-        expect(mozi.isAlphaNumeric('あ')).toBeFalsy();
+});
+
+describe('isAscii', function() {
+
+    it('to be truthy.', function() {
+        expect(unibose.isAscii('012ABZ')).toBeTruthy();
+        expect(unibose.isAscii('1A!?-)_')).toBeTruthy();
+
     });
 
-    it('false 1A_', function() {
-        expect(mozi.isAlphaNumeric('1A_')).toBeFalsy();
+    it('to be falsy.', function() {
+        expect(unibose.isAscii('０あ')).toBeFalsy();
+        expect(unibose.isAscii('０１２a４５Ｚ')).toBeFalsy();
+    });
+
+});
+
+describe('isHiragana', function() {
+
+    it('to be truthy.', function() {
+        expect(unibose.isHiragana('いろは')).toBe(true);
+    });
+
+    it('to be falsy.', function() {
+        expect(unibose.isHiragana('1A_-?!')).toBe(false);
     });
 
 });
 
 describe('isLineBreak', function() {
 
-    it('true \\n', function() {
-        expect(mozi.isLineBreak('\n')).toBeTruthy();
+    it('to be truthy.', function() {
+        expect(unibose.isLineBreak('\n')).toBeTruthy();
+        expect(unibose.isLineBreak('\r\n')).toBeTruthy();
     });
 
-    it('true \\r\\n', function() {
-        expect(mozi.isLineBreak('\r\n')).toBeTruthy();
-    });
-
-    it('false A\\nB', function() {
-        expect(mozi.isLineBreak('A\nB')).toBeFalsy();
-    });
-
-    it('false \\t', function() {
-        expect(mozi.isLineBreak('\t')).toBeFalsy();
+    it('to be falsy.', function() {
+        expect(unibose.isLineBreak('A\nB')).toBeFalsy();
+        expect(unibose.isLineBreak('\t')).toBeFalsy();
     });
 
 });
 
 describe('isBlank', function() {
 
-    it("true \\t", function() {
-        expect(mozi.isBlank('\t')).toBeTruthy();
+    it('to be truthy.', function() {
+        expect(unibose.isBlank('\t')).toBeTruthy();
+        expect(unibose.isBlank('　')).toBeTruthy();
     });
 
-    it("true '　'", function() {
-        expect(mozi.isBlank('　')).toBeTruthy();
-    });
-
-    it('true \\n', function() {
-        expect(mozi.isBlank('\n')).toBeTruthy();
-    });
-
-    it('false 1 a', function() {
-        expect(mozi.isBlank('1 a')).toBeFalsy();
+    it('to be falsy.', function() {
+        expect(unibose.isBlank('\n')).toBeTruthy();
+        expect(unibose.isBlank('1 a')).toBeFalsy();
     });
 
 });
 
 describe('isOpeningBracket', function() {
 
-    it('true 「', function() {
-        expect(mozi.isOpeningBracket('「')).toBeTruthy();
+    it('to be truthy.', function() {
+        expect(unibose.isOpeningBracket('「')).toBeTruthy();
     });
 
-    it('false 」', function() {
-        expect(mozi.isOpeningBracket('」')).toBeFalsy();
+    it('to be falsy.', function() {
+        expect(unibose.isOpeningBracket('」')).toBeFalsy();
     });
 
 });
 
 describe('isClosingBracket', function() {
 
-    it('true ]', function() {
-        expect(mozi.isClosingBracket(']')).toBeTruthy();
+    it('to be truthy.', function() {
+        expect(unibose.isClosingBracket(']')).toBeTruthy();
     });
 
-    it('false [', function() {
-        expect(mozi.isClosingBracket('[')).toBeFalsy();
+    it('to be falsy.', function() {
+        expect(unibose.isClosingBracket('[')).toBeFalsy();
     });
 
 });
 
 describe('isHyphen', function() {
 
-    it('true -', function() {
-        expect(mozi.isHyphen('-')).toBeTruthy();
+    it('to be truthy.', function() {
+        expect(unibose.isHyphen('-')).toBeTruthy();
+        expect(unibose.isHyphen('〜')).toBeTruthy();
     });
 
-    it('true 〜', function() {
-        expect(mozi.isHyphen('〜')).toBeTruthy();
-    });
-
-    it('false ＝', function() {
-        expect(mozi.isHyphen('＝')).toBeFalsy();
+    it('to be falsy.', function() {
+        expect(unibose.isHyphen('＝')).toBeFalsy();
     });
 
 });
 
 describe('isPunctuation', function() {
 
-    it('true 、', function() {
-        expect(mozi.isPunctuation('、')).toBeTruthy();
+    it('to be truthy.', function() {
+        expect(unibose.isPunctuation('、')).toBeTruthy();
+        expect(unibose.isPunctuation('。')).toBeTruthy();
     });
 
-    it('true 。', function() {
-        expect(mozi.isPunctuation('。')).toBeTruthy();
-    });
-
-    it('false ＊', function() {
-        expect(mozi.isHyphen('＊')).toBeFalsy();
+    it('to be falsy.', function() {
+        expect(unibose.isHyphen('＊')).toBeFalsy();
     });
 
 });
 
 describe('isEllipsis', function() {
 
-    it('true …', function() {
-        expect(mozi.isEllipsis('…')).toBeTruthy();
+    it('to be truthy.', function() {
+        expect(unibose.isEllipsis('…')).toBeTruthy();
     });
 
-    it('false ・・・', function() {
-        expect(mozi.isEllipsis('・・・')).toBeFalsy();
+    it('to be falsy.', function() {
+        expect(unibose.isEllipsis('・・・')).toBeFalsy();
     });
 
 });
 
 describe('isNotPermittedStart', function() {
 
-    it('true ？', function() {
-        expect(mozi.isNotPermittedStart('？')).toBeTruthy();
+    it('to be truthy.', function() {
+        expect(unibose.isNotPermittedStart('？')).toBeTruthy();
     });
 
-    it('false （', function() {
-        expect(mozi.isNotPermittedStart('（')).toBeFalsy();
+    it('to be falsy.', function() {
+        expect(unibose.isNotPermittedStart('（')).toBeFalsy();
     });
 
 });
 
 describe('isNotPermittedEnd', function() {
 
-    it('true （', function() {
-        expect(mozi.isNotPermittedEnd('（')).toBeTruthy();
+    it('to be truthy.', function() {
+        expect(unibose.isNotPermittedEnd('（')).toBeTruthy();
     });
 
-    it('false ！', function() {
-        expect(mozi.isNotPermittedEnd('！')).toBeFalsy();
+    it('to be falsy.', function() {
+        expect(unibose.isNotPermittedEnd('！')).toBeFalsy();
     });
 
 });
 
 describe('isSurrogatePair', function() {
 
-    it('true 𡵅', function() {
-        expect(mozi.isSurrogatePair('𡵅')).toBeTruthy();
+    it('to be truthy.', function() {
+        expect(unibose.isSurrogatePair('𡵅')).toBeTruthy();
+        expect(unibose.isSurrogatePair('𡉴𡧃')).toBeTruthy();
     });
 
-    it('false 川', function() {
-        expect(mozi.isSurrogatePair('川')).toBeFalsy();
-    });
-
-    it('true 𡉴𡧃', function() {
-        expect(mozi.isSurrogatePair('𡉴𡧃')).toBeTruthy();
-    });
-
-    it('false 龠𡼞', function() {
-        expect(mozi.isSurrogatePair('龠𡼞')).toBeFalsy();
+    it('to be falsy.', function() {
+        expect(unibose.isSurrogatePair('川')).toBeFalsy();
+        expect(unibose.isSurrogatePair('龠𡼞')).toBeFalsy();
     });
 
 });
 
 describe('isUnicode6Emoji', function() {
 
-    it('true \uD83D\uDE01', function() {
-        expect(mozi.isUnicode6Emoji('\uD83D\uDE01')).toBeTruthy();
+    it('to be truthy.', function() {
+        expect(unibose.isUnicode6Emoji('\uD83D\uDE01')).toBeTruthy();
+        expect(unibose.isUnicode6Emoji('\uD83D\uDEC0')).toBeTruthy();
+        expect(unibose.isUnicode6Emoji('\uD83C\uDDEF')).toBeTruthy();
+        expect(unibose.isUnicode6Emoji('\u2702')).toBeTruthy();
     });
 
-    it('true \uD83D\uDEC0', function() {
-        expect(mozi.isUnicode6Emoji('\uD83D\uDEC0')).toBeTruthy();
-    });
-
-    it('true \uD83C\uDDEF', function() {
-        expect(mozi.isUnicode6Emoji('\uD83C\uDDEF')).toBeTruthy();
-    });
-
-    it('true \u2702', function() {
-        expect(mozi.isUnicode6Emoji('\u2702')).toBeTruthy();
-    });
-
-    it('false ＠', function() {
-        expect(mozi.isUnicode6Emoji('＠')).toBeFalsy();
-    });
-
-    it('false ☭', function() {
-        expect(mozi.isUnicode6Emoji('☭')).toBeFalsy();
+    it('to be falsy.', function() {
+        expect(unibose.isUnicode6Emoji('＠')).toBeFalsy();
+        expect(unibose.isUnicode6Emoji('☭')).toBeFalsy();
     });
 });
