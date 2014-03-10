@@ -1,4 +1,6 @@
 {
+  "name"  : "Unibose",
+  "version": "0.1",
   "readme": "README.md",
   "devDependencies": {
     "grunt": "~0.4.3",
