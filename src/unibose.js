@@ -17,7 +17,7 @@
         patternHiragana          : new RegExp('[\u3040-\u309F]+'),
         patternKatanaka          : new RegExp('[\u30A0-\u30FF]+'),
         patternHanKana           : new RegExp('[\uFF65-\uFF9F]+'),
-        patternHalfWidth         : new RegExp('[0-9a-zA-Z\uFF61-\uFFDC\uFFE8-\uFFEE]+'),
+        patternHalfWidth         : new RegExp('[0-9a-zA-Z\u0020-\u007E\uFF61-\uFFDC\uFFE8-\uFFEE]+'),
         patternCyrillic          : new RegExp('[\u0400-\u052F\u2DE0-\u2DFF\uA640-\uA69F]'),
         patternBlank             : new RegExp('[\f\n\r\t\v\s\u3000]+'),
         patternLineBreak         : new RegExp('[\r\n]+'),
