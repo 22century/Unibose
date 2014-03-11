@@ -18,8 +18,9 @@
         patternKatanaka          : new RegExp('[\u30A0-\u30FF]+'),
         patternHanKana           : new RegExp('[\uFF65-\uFF9F]+'),
         patternHalfWidth         : new RegExp('[0-9a-zA-Z\u0020-\u007E\uFF61-\uFFDC\uFFE8-\uFFEE]+'),
+        patternFullWidth         : new RegExp('[^0-9a-zA-Z\u0020-\u007E\uFF61-\uFFDC\uFFE8-\uFFEE]+'),
         patternCyrillic          : new RegExp('[\u0400-\u052F\u2DE0-\u2DFF\uA640-\uA69F]+'),
-        patternBlank             : new RegExp('[\f\n\r\t\v\s\u3000]+'),
+        patternBlank             : new RegExp('[\\s\u3000]+'),
         patternLineBreak         : new RegExp('[\r\n]+'),
         patternPageBreak         : new RegExp('[\f]+'),
         patternControlCode       : new RegExp('[\u0000-\u001F\u007F]+'),
@@ -55,10 +56,20 @@
          * @param {string} str
          * @returns {boolean}
          */
-        pMatch: function (pattern, str) {
+        match: function (pattern, str) {
             var result = pattern.exec(str);
             if (result === null) { return false; }
             return (result[0].length === str.length);
+        },
+
+        /**
+         * 部分一致
+         * @param {RegExp} pattern
+         * @param {string} str
+         * @returns {boolean}
+         */
+        search: function (pattern, str) {
+            return pattern.test(str);
         },
 
         /**
@@ -100,12 +111,22 @@
         },
 
         /**
+         * 改行コード正規化
+         * @param {string} string
+         * @returns {string}
+         */
+        normalizeLinebreak: function(string){
+            var breakCode = typeof arguments[1] === 'string' ? arguments[1] : '\n';
+            return string.split(_.patternLineBreak).join(breakCode);
+        },
+
+        /**
          * 英字（全角半角混同）
          * @param {string} str
          * @returns {boolean}
          */
         isAlpha: function(str){
-            return F.pMatch(_.patternAlpha, str);
+            return F.match(_.patternAlpha, str);
         },
 
         /**
@@ -114,7 +135,7 @@
          * @returns {boolean}
          */
         isNumeric: function(str){
-            return F.pMatch(_.patternNumeric, str);
+            return F.match(_.patternNumeric, str);
         },
 
         /**
@@ -123,7 +144,7 @@
          * @returns {boolean}
          */
         isAlphaNumeric: function(str){
-            return F.pMatch(_.patternAlphaNumeric, str);
+            return F.match(_.patternAlphaNumeric, str);
         },
 
         /**
@@ -132,7 +153,7 @@
          * @returns {boolean}
          */
         isAscii: function(str){
-            return F.pMatch(_.patternAscii, str);
+            return F.match(_.patternAscii, str);
         },
 
         /**
@@ -141,7 +162,7 @@
          * @returns {boolean}
          */
         isHiragana: function(str){
-            return F.pMatch(_.patternHiragana, str);
+            return F.match(_.patternHiragana, str);
         },
 
         /**
@@ -150,7 +171,7 @@
          * @returns {boolean}
          */
         isKatakana: function(str){
-            return F.pMatch(_.patternKatanaka, str);
+            return F.match(_.patternKatanaka, str);
         },
 
         /**
@@ -159,7 +180,7 @@
          * @returns {boolean}
          */
         isHankana: function(str){
-            return F.pMatch(_.patternHanKana, str);
+            return F.match(_.patternHanKana, str);
         },
 
         /**
@@ -168,7 +189,7 @@
          * @returns {boolean}
          */
         isHalfWidth: function(str){
-            return F.pMatch(_.patternHalfWidth, str);
+            return F.match(_.patternHalfWidth, str);
         },
 
         /**
@@ -177,7 +198,7 @@
          * @returns {boolean}
          */
         isFullWidth: function(str){
-            return !F.pMatch(_.patternHalfWidth, str);
+            return F.match(_.patternFullWidth, str);
         },
 
         /**
@@ -186,7 +207,7 @@
          * @returns {boolean}
          */
         isCyrillic: function(str){
-            return F.pMatch(_.patternCyrillic, str);
+            return F.match(_.patternCyrillic, str);
         },
 
         /**
@@ -195,7 +216,7 @@
          * @returns {boolean}
          */
         isContralCode: function(str){
-            return F.pMatch(_.patternControlCode, str);
+            return F.match(_.patternControlCode, str);
         },
 
         /**
@@ -204,7 +225,7 @@
          * @returns {boolean}
          */
         isLineBreak: function(str){
-            return F.pMatch(_.patternLineBreak, str);
+            return F.match(_.patternLineBreak, str);
         },
 
         /**
@@ -213,7 +234,7 @@
          * @returns {boolean}
          */
         isPageBreak: function(str){
-            return F.pMatch(_.patternPageBreak, str);
+            return F.match(_.patternPageBreak, str);
         },
 
         /**
@@ -222,7 +243,7 @@
          * @returns {boolean}
          */
         isBlank: function(str){
-            return str.length === 0 || F.pMatch(_.patternBlank, str);
+            return str.length === 0 || F.match(_.patternBlank, str);
         },
 
         /**
@@ -231,7 +252,7 @@
          * @returns {boolean}
          */
         isOpeningBracket: function(str){
-            return F.pMatch(_.patternOpeningBracket, str);
+            return F.match(_.patternOpeningBracket, str);
         },
 
         /**
@@ -240,7 +261,7 @@
          * @returns {boolean}
          */
         isClosingBracket: function(str){
-            return F.pMatch(_.patternClosingBracket, str);
+            return F.match(_.patternClosingBracket, str);
         },
 
         /**
@@ -249,7 +270,7 @@
          * @returns {boolean}
          */
         isHyphen: function(str){
-            return F.pMatch(_.patternHyphen, str);
+            return F.match(_.patternHyphen, str);
         },
 
         /**
@@ -258,7 +279,7 @@
          * @returns {boolean}
          */
         isPunctuation: function(str){
-            return F.pMatch(_.patternPunctuation, str);
+            return F.match(_.patternPunctuation, str);
         },
 
         /**
@@ -267,7 +288,7 @@
          * @returns {boolean}
          */
         isEllipsis: function(str){
-            return F.pMatch(_.patternEllipsis, str);
+            return F.match(_.patternEllipsis, str);
         },
 
         /**
@@ -276,7 +297,7 @@
          * @returns {boolean}
          */
         isNotPermittedStart : function(str){
-            return F.pMatch(_.patternNotPermittedStart, str);
+            return F.match(_.patternNotPermittedStart, str);
         },
 
         /**
@@ -285,7 +306,7 @@
          * @returns {boolean}
          */
         isNotPermittedEnd: function(str){
-            return F.pMatch(_.patternNotPermittedEnd, str);
+            return F.match(_.patternNotPermittedEnd, str);
         },
 
         /**
@@ -294,7 +315,7 @@
          * @returns {boolean}
          */
         isSurrogatePair: function(str){
-            return F.pMatch(_.patternSurrogatePair, str);
+            return F.match(_.patternSurrogatePair, str);
         },
 
         /**
@@ -303,17 +324,214 @@
          * @returns {boolean}
          */
         isUnicode6Emoji: function(str){
-            return F.pMatch(_.patternUnicode6Emoji, str);
+            return F.match(_.patternUnicode6Emoji, str);
         },
 
         /**
-         * 改行コード正規化
-         * @param {string} string
-         * @returns {string}
+         * 英字（全角半角混同）
+         * @param {string} str
+         * @returns {boolean}
          */
-        normalizeLinebreak: function(string){
-            var breakCode = typeof arguments[1] === 'string' ? arguments[1] : '\n';
-            return string.split(_.patternLineBreak).join(breakCode);
+        hasAlpha: function(str){
+            return F.search(_.patternAlpha, str);
+        },
+
+        /**
+         * 数字（全角半角混同）
+         * @param {string} str
+         * @returns {boolean}
+         */
+        hasNumeric: function(str){
+            return F.search(_.patternNumeric, str);
+        },
+
+        /**
+         * 英数字（全角半角混同）
+         * @param {string} str
+         * @returns {boolean}
+         */
+        hasAlphaNumeric: function(str){
+            return F.search(_.patternAlphaNumeric, str);
+        },
+
+        /**
+         * ASCIIコード
+         * @param {string} str
+         * @returns {boolean}
+         */
+        hasAscii: function(str){
+            return F.search(_.patternAscii, str);
+        },
+
+        /**
+         * ひらがな
+         * @param {string} str
+         * @returns {boolean}
+         */
+        hasHiragana: function(str){
+            return F.search(_.patternHiragana, str);
+        },
+
+        /**
+         * カタカナ
+         * @param {string} str
+         * @returns {boolean}
+         */
+        hasKatakana: function(str){
+            return F.search(_.patternKatanaka, str);
+        },
+
+        /**
+         * 半角カナ
+         * @param {string} str
+         * @returns {boolean}
+         */
+        hasHankana: function(str){
+            return F.search(_.patternHanKana, str);
+        },
+
+        /**
+         * 半角
+         * @param {string} str
+         * @returns {boolean}
+         */
+        hasHalfWidth: function(str){
+            return F.search(_.patternHalfWidth, str);
+        },
+
+        /**
+         * 全角
+         * @param {string} str
+         * @returns {boolean}
+         */
+        hasFullWidth: function(str){
+            return F.search(_.patternFullWidth, str);
+        },
+
+        /**
+         * キリル文字
+         * @param {string} str
+         * @returns {boolean}
+         */
+        hasCyrillic: function(str){
+            return F.search(_.patternCyrillic, str);
+        },
+
+        /**
+         * 制御コード
+         * @param {string} str
+         * @returns {boolean}
+         */
+        hasContralCode: function(str){
+            return F.search(_.patternControlCode, str);
+        },
+
+        /**
+         * 改行コード
+         * @param {string} str
+         * @returns {boolean}
+         */
+        hasLineBreak: function(str){
+            return F.search(_.patternLineBreak, str);
+        },
+
+        /**
+         * 改ページコード
+         * @param {string} str
+         * @returns {boolean}
+         */
+        hasPageBreak: function(str){
+            return F.search(_.patternPageBreak, str);
+        },
+
+        /**
+         * 空白文字
+         * @param {string} str
+         * @returns {boolean}
+         */
+        hasBlank: function(str){
+            return str.length === 0 || F.search(_.patternBlank, str);
+        },
+
+        /**
+         * 始め括弧
+         * @param {string} str
+         * @returns {boolean}
+         */
+        hasOpeningBracket: function(str){
+            return F.search(_.patternOpeningBracket, str);
+        },
+
+        /**
+         * 閉じ括弧
+         * @param {string} str
+         * @returns {boolean}
+         */
+        hasClosingBracket: function(str){
+            return F.search(_.patternClosingBracket, str);
+        },
+
+        /**
+         * 長音符
+         * @param {string} str
+         * @returns {boolean}
+         */
+        hasHyphen: function(str){
+            return F.search(_.patternHyphen, str);
+        },
+
+        /**
+         * 句読点
+         * @param {string} str
+         * @returns {boolean}
+         */
+        hasPunctuation: function(str){
+            return F.search(_.patternPunctuation, str);
+        },
+
+        /**
+         * リーダー、省略記号
+         * @param {string} str
+         * @returns {boolean}
+         */
+        hasEllipsis: function(str){
+            return F.search(_.patternEllipsis, str);
+        },
+
+        /**
+         * 行頭禁則文字
+         * @param {string} str
+         * @returns {boolean}
+         */
+        hasNotPermittedStart : function(str){
+            return F.search(_.patternNotPermittedStart, str);
+        },
+
+        /**
+         * 行末禁則文字
+         * @param {string} str
+         * @returns {boolean}
+         */
+        hasNotPermittedEnd: function(str){
+            return F.search(_.patternNotPermittedEnd, str);
+        },
+
+        /**
+         * サロゲートペア
+         * @param {string} str
+         * @returns {boolean}
+         */
+        hasSurrogatePair: function(str){
+            return F.search(_.patternSurrogatePair, str);
+        },
+
+        /**
+         * Unicode6絵文字コード
+         * @param {string} str
+         * @returns {boolean}
+         */
+        hasUnicode6Emoji: function(str){
+            return F.search(_.patternUnicode6Emoji, str);
         }
 
     };
