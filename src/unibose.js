@@ -3,7 +3,7 @@
  *
  * @auther 22century
  * @license MIT license.
- * @version 0.1
+ * @version 0.2
  */
 (function(window){
 
