@@ -18,7 +18,7 @@
         patternKatanaka          : new RegExp('[\u30A0-\u30FF]+'),
         patternHanKana           : new RegExp('[\uFF65-\uFF9F]+'),
         patternHalfWidth         : new RegExp('[0-9a-zA-Z\u0020-\u007E\uFF61-\uFFDC\uFFE8-\uFFEE]+'),
-        patternCyrillic          : new RegExp('[\u0400-\u052F\u2DE0-\u2DFF\uA640-\uA69F]'),
+        patternCyrillic          : new RegExp('[\u0400-\u052F\u2DE0-\u2DFF\uA640-\uA69F]+'),
         patternBlank             : new RegExp('[\f\n\r\t\v\s\u3000]+'),
         patternLineBreak         : new RegExp('[\r\n]+'),
         patternPageBreak         : new RegExp('[\f]+'),
@@ -93,7 +93,7 @@
         toUnicodeLiteral: function(str){
             var chars = [];
             for (var i = 0, l = str.length; i < l; i++) {
-                chars[i] = '\\u' + str.charCodeAt(i).toString(16);
+                chars[i] = '\\u' + ('0000' + str.charCodeAt(i).toString(16)).slice(-4);
             }
             return chars.join('');
         },
@@ -308,13 +308,10 @@
         /**
          * 改行コード正規化
          * @param {string} string
-         * @param {string} breakCode
          * @returns {string}
          */
-        normalizeLinebreak: function(string, breakCode){
-            if (typeof arguments[1] !== "string") {
-                breakCode = "\n";
-            }
+        normalizeLinebreak: function(string){
+            var breakCode = typeof arguments[1] === 'string' ? arguments[1] : '\n';
             return string.split(_.patternLineBreak).join(breakCode);
         }
 
