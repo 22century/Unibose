@@ -23,13 +23,14 @@
         patternLineBreak         : new RegExp('[\r\n]+'),
         patternPageBreak         : new RegExp('[\f]+'),
         patternControlCode       : new RegExp('[\u0000-\u001F\u007F]+'),
-        patternOpeningBracket    : new RegExp('[（(\\[｛〔〈《「『【〘〖〝‘“｟«]'),
-        patternClosingBracket    : new RegExp('[）)\\]｝〕〉》」』】〙〗〟’”｠»]'),
-        patternHyphen            : new RegExp('[ー゠–〜～-]'),
+        patternOpeningBracket    : new RegExp('[\\[}("\'\uFF08\uFF5B\u3014\u3008\u300A\u300C\u300E\u3010\u3018\u3016\u301D\u2018\u201C\uFF5F\u00AB]'),
+        patternClosingBracket    : new RegExp('[\\]})"\'\uFF09\uFF5D\u3015\u3009\u300B\u300D\u300F\u3011\u3019\u3017\u301F\u2019\u201D\uFF60\u00BB]'),
+        patternHyphen            : new RegExp('[\u30FC\u30A0\u2013\u301C\uFF5E-]'),
         patternEllipsis          : new RegExp('[\u2024-\u2027]'),
-        patternPunctuation       : new RegExp('[｡。．.、，]'),
-        patternNotPermittedStart : new RegExp('[）。.,)\\]｝、〕〉》」』】〙〗〟’”｠»・:;/‐゠–〜～？?！!‼⁇⁈⁉]'),
-        patternNotPermittedEnd   : new RegExp('[（(\\[｛〔〈《「『【〘〖〝‘“｟«]'),
+        patternPunctuation       : new RegExp('[.,\uFF61\u3002\uFF0E\u002E\u3001\uFF0C]'),
+        patternNotPermittedStart : new RegExp(['[\\]}):;/!?.,\uFF09\u3002\uFF5D\u3001\u3015\u3009\u300B\u300D\u300F\u3011\u3019\u3017',
+                                               '\u301F\u2019\u201D\uFF60\u00BB\u30FB\u30A0\u2013\u301C\uFF5E\uFF1F\uFF01\u203C\u2047\u2048\u2049‐]'].join('')),
+        patternNotPermittedEnd   : new RegExp('[\\[}(\uFF08\uFF5B\u3014\u3008\u300A\u300C\u300E\u3010\u3018\u3016\u301D\u2018\u201C\uFF5F\u00AB]'),
         patternSurrogatePair     : new RegExp('(?:[\uD800-\uDBFF][\uDC00-\uDFFF])+'),
         patternCJKSymbol         : new RegExp('[\u3000-\u303F]+'),
         patternMathOperator      : new RegExp('[\u2200-\u22FF]+'),
@@ -93,7 +94,7 @@
         toUnicodeLiteral: function(str){
             var chars = [];
             for (var i = 0, l = str.length; i < l; i++) {
-                chars[i] = '\\u' + ('0000' + str.charCodeAt(i).toString(16)).slice(-4);
+                chars[i] = '\\u' + ('0000' + str.charCodeAt(i).toString(16)).toUpperCase().slice(-4);
             }
             return chars.join('');
         },
