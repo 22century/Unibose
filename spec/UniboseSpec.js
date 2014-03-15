@@ -19,11 +19,32 @@ describe('normalizeLinebreak', function() {
 
 });
 
+describe('stripSurrogatePair', function() {
+
+    it('to be truthy.', function() {
+        expect(unibose.stripSurrogatePair('123𡉴𡧃456')).toBe('123456');
+        expect(unibose.stripSurrogatePair('_ABC龠𡉴𡧃＠＊')).toBe('_ABC龠＠＊');
+        //expect(unibose.stripSurrogatePair('𡉴𡉴𡧃456𡉴𡉴𡉴', '□')).toBe('□□456');
+    });
+
+});
+
+describe('stripUnicode6Emoji', function() {
+
+    it('to be truthy.', function() {
+        expect(unibose.stripUnicode6Emoji('😀')).toBe('');
+        expect(unibose.stripUnicode6Emoji('\u2195\uFE0F\u0032\uFE0F\u20E3\u274C')).toBe('');
+        expect(unibose.stripUnicode6Emoji('\uD83D\uDC40\uD83D\uDC4D\uD83D\uDE8C\uD83D\uDCBF\u2195\uFE0F\u0032\uFE0F\u20E3\u274C')).toBe('');
+    });
+
+});
+
 describe('isAlpha', function() {
 
     it('to be truthy.', function() {
         expect(unibose.isAlpha('abcZ')).toBe(true);
         expect(unibose.isAlpha('ＡＢＣＺ')).toBe(true);
+        expect(unibose.isAlpha('aaaaaa')).toBe(true);
     });
 
     it('to be falsy.', function() {
@@ -37,6 +58,7 @@ describe('isNumeric', function() {
 
     it('to be truthy.', function() {
         expect(unibose.isNumeric('012345')).toBe(true);
+        expect(unibose.isNumeric('01233333')).toBe(true);
         expect(unibose.isNumeric('０１２３４５')).toBe(true);
     });
 

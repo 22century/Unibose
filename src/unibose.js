@@ -8,8 +8,7 @@
 (function(window){
 
     var _ = {
-        hasDefineProperty        : (typeof Object.defineProperty === 'function'
-                                 && typeof Object.defineProperties === 'function'),
+        hasDefineProperty        : (typeof Object.defineProperty === 'function' && typeof Object.defineProperties === 'function'),
         patternAlpha             : new RegExp('[a-zA-Z\uFF21-\uFF3A\uFF41-\uFF5A]+'),
         patternNumeric           : new RegExp('[0-9\uFF10-\uFF19]+'),
         patternAlphaNumeric      : new RegExp('[a-zA-Z\uFF21-\uFF3A\uFF41-\uFF5A0-9\uFF10-\uFF19]+'),
@@ -24,27 +23,27 @@
         patternLineBreak         : new RegExp('[\r\n]+'),
         patternPageBreak         : new RegExp('[\f]+'),
         patternControlCode       : new RegExp('[\u0000-\u001F\u007F]+'),
-        patternOpeningBracket    : new RegExp('[\\[}("\'\uFF08\uFF5B\u3014\u3008\u300A\u300C\u300E\u3010\u3018\u3016\u301D\u2018\u201C\uFF5F\u00AB]'),
-        patternClosingBracket    : new RegExp('[\\]})"\'\uFF09\uFF5D\u3015\u3009\u300B\u300D\u300F\u3011\u3019\u3017\u301F\u2019\u201D\uFF60\u00BB]'),
-        patternHyphen            : new RegExp('[\u30FC\u30A0\u2013\u301C\uFF5E-]'),
+        patternOpeningBracket    : new RegExp('[\\[}("\'\uFF08\uFF5B\u3014\u3008\u300A\u300C\u300E\u3010\u3018\u3016\u301D\u2018\u201C\uFF5F\u00AB]+'),
+        patternClosingBracket    : new RegExp('[\\]})"\'\uFF09\uFF5D\u3015\u3009\u300B\u300D\u300F\u3011\u3019\u3017\u301F\u2019\u201D\uFF60\u00BB]+'),
+        patternHyphen            : new RegExp('[\u30FC\u30A0\u2013\u301C\uFF5E-]+'),
         patternEllipsis          : new RegExp('[\u2024-\u2027]'),
-        patternPunctuation       : new RegExp('[.,\uFF61\u3002\uFF0E\u002E\u3001\uFF0C]'),
+        patternPunctuation       : new RegExp('[.,\uFF61\u3002\uFF0E\u002E\u3001\uFF0C]+'),
         patternNotPermittedStart : new RegExp(['[\\]}):;/!?.,\uFF09\u3002\uFF5D\u3001\u3015\u3009\u300B\u300D\u300F\u3011\u3019\u3017',
-                                               '\u301F\u2019\u201D\uFF60\u00BB\u30FB\u30A0\u2013\u301C\uFF5E\uFF1F\uFF01\u203C\u2047\u2048\u2049‐]'].join('')),
-        patternNotPermittedEnd   : new RegExp('[\\[}(\uFF08\uFF5B\u3014\u3008\u300A\u300C\u300E\u3010\u3018\u3016\u301D\u2018\u201C\uFF5F\u00AB]'),
+                                               '\u301F\u2019\u201D\uFF60\u00BB\u30FB\u30A0\u2013\u301C\uFF5E\uFF1F\uFF01\u203C\u2047\u2048\u2049‐]+'].join('')),
+        patternNotPermittedEnd   : new RegExp('[\\[}(\uFF08\uFF5B\u3014\u3008\u300A\u300C\u300E\u3010\u3018\u3016\u301D\u2018\u201C\uFF5F\u00AB]+'),
         patternSurrogatePair     : new RegExp('(?:[\uD800-\uDBFF][\uDC00-\uDFFF])+'),
         patternCJKSymbol         : new RegExp('[\u3000-\u303F]+'),
         patternMathOperator      : new RegExp('[\u2200-\u22FF]+'),
         patternUnicode6Emoji     : new RegExp([
-            '[\u00A9\u00AE\u2002\u2003\u2005\u203C\u2049\u2122\u2139\u2194-\u2199\u21A9\u21AA\u231A\u231B',
+            '(?:[\u00A9\u00AE\u2002\u2003\u2005\u203C\u2049\u2122\u2139\u2194-\u2199\u21A9\u21AA\u231A\u231B',
             '\u23E9-\u23EC\u23F0\u23F3\u24C2\u25AA\u25AB\u25B6\u25C0\u25FB-\u25FE\u2600\u2601\u260E\u2611',
             '\u2614\u2615\u261D\u263A\u2648-\u2653\u2660\u2663\u2665\u2666\u2668\u267B\u267F\u2693\u26A0\u26A1',
             '\u26AA\u26AB\u26BD\u26BE\u26C4\u26C5\u26CE\u26D4\u26EA\u26F2\u26F3\u26F5\u26FA\u26FD\u2702\u2705',
             '\u2708-\u270C\u270F\u2712\u2714\u2716\u2728\u2733\u2734\u2744\u2747\u274C\u274E\u2753-\u2755\u2757',
-            '\u2764\u2795-\u2797\u27A1\u27B0\u2934\u2935\u2B05-\u2B07\u2B1B\u2B1C\u2B50\u2B55\u3030\u303D\u3297\u3299]+',
-            '|(?:[\u0023-\u0039][\u20E3])+',
-            '|(?:[\uD83C][\uDC04-\uDFF0])+',
-            '|(?:[\uD83D][\uDC0C-\uDEC0])+'
+            '\u2764\u2795-\u2797\u27A1\u27B0\u2934\u2935\u2B05-\u2B07\u2B1B\u2B1C\u2B50\u2B55\u3030\u303D\u3297\u3299][\uFE0F]?',
+            '|[\u0023-\u0039][\uFE0F]?[\u20E3]',
+            '|[\uD83C][\uDC04-\uDFF0]',
+            '|[\uD83D][\uDC0C-\uDEC0])+'
         ].join(''))
     };
 
@@ -58,6 +57,7 @@
          */
         match: function (pattern, str) {
             var result = pattern.exec(str);
+            //console.log(str, pattern, result);//, result[0].length, str.length);
             if (result === null) { return false; }
             return (result[0].length === str.length);
         },
@@ -112,12 +112,38 @@
 
         /**
          * 改行コード正規化
-         * @param {string} string
+         * @param {string} str
+         * @param {string} breakCode... 置換する改行コード（省略可）
          * @returns {string}
          */
-        normalizeLinebreak: function(string){
-            var breakCode = typeof arguments[1] === 'string' ? arguments[1] : '\n';
-            return string.split(_.patternLineBreak).join(breakCode);
+        normalizeLinebreak: function(str, breakCode){
+            return str.split(_.patternLineBreak).join(
+                (arguments.length <= 1) ? '\n' : breakCode
+            );
+        },
+
+        /**
+         * サロゲートペアを除去
+         * @param {string} str
+         * @param {string} replaceStr... 置換文字（省略可）
+         * @returns {string}
+         */
+        stripSurrogatePair: function(str, replaceStr){
+            return str.replace(_.patternSurrogatePair,
+                (arguments.length <= 1) ? '' : replaceStr
+            );
+        },
+
+        /**
+         * 絵文字を除去
+         * @param {string} str
+         * @param {string} replaceStr... 置換文字（省略可）
+         * @returns {string}
+         */
+        stripUnicode6Emoji: function(str, replaceStr){
+            return str.replace(_.patternUnicode6Emoji,
+                (arguments.length <= 1) ? '' : replaceStr
+            );
         },
 
         /**
