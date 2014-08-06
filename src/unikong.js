@@ -7,34 +7,35 @@
  */
 (function(window){
 
-    var _ = {
-        hasDefineProperty        : (typeof Object.defineProperty === 'function' && typeof Object.defineProperties === 'function'),
-        patternAlpha             : new RegExp('[a-zA-Z\uFF21-\uFF3A\uFF41-\uFF5A]+'),
-        patternNumeric           : new RegExp('[0-9\uFF10-\uFF19]+'),
-        patternAlphaNumeric      : new RegExp('[a-zA-Z\uFF21-\uFF3A\uFF41-\uFF5A0-9\uFF10-\uFF19]+'),
-        patternAscii             : new RegExp('[\u0020-\u007E]+'),
-        patternHiragana          : new RegExp('[\u3040-\u309F]+'),
-        patternKatanaka          : new RegExp('[\u30A0-\u30FF]+'),
-        patternHanKana           : new RegExp('[\uFF65-\uFF9F]+'),
-        patternHalfWidth         : new RegExp('[0-9a-zA-Z\u0020-\u007E\uFF61-\uFFDC\uFFE8-\uFFEE]+'),
-        patternFullWidth         : new RegExp('[^0-9a-zA-Z\u0020-\u007E\uFF61-\uFFDC\uFFE8-\uFFEE]+'),
-        patternCyrillic          : new RegExp('[\u0400-\u052F\u2DE0-\u2DFF\uA640-\uA69F]+'),
-        patternBlank             : new RegExp('[\\s\u3000]+'),
-        patternLineBreak         : new RegExp('[\r\n]+'),
-        patternPageBreak         : new RegExp('[\f]+'),
-        patternControlCode       : new RegExp('[\u0000-\u001F\u007F]+'),
-        patternOpeningBracket    : new RegExp('[\\[}("\'\uFF08\uFF5B\u3014\u3008\u300A\u300C\u300E\u3010\u3018\u3016\u301D\u2018\u201C\uFF5F\u00AB]+'),
-        patternClosingBracket    : new RegExp('[\\]})"\'\uFF09\uFF5D\u3015\u3009\u300B\u300D\u300F\u3011\u3019\u3017\u301F\u2019\u201D\uFF60\u00BB]+'),
-        patternHyphen            : new RegExp('[\u30FC\u30A0\u2013\u301C\uFF5E-]+'),
-        patternEllipsis          : new RegExp('[\u2024-\u2027]'),
-        patternPunctuation       : new RegExp('[.,\uFF61\u3002\uFF0E\u002E\u3001\uFF0C]+'),
-        patternNotPermittedStart : new RegExp(['[\\]}):;/!?.,\uFF09\u3002\uFF5D\u3001\u3015\u3009\u300B\u300D\u300F\u3011\u3019\u3017',
-                                               '\u301F\u2019\u201D\uFF60\u00BB\u30FB\u30A0\u2013\u301C\uFF5E\uFF1F\uFF01\u203C\u2047\u2048\u2049‐]+'].join('')),
-        patternNotPermittedEnd   : new RegExp('[\\[}(\uFF08\uFF5B\u3014\u3008\u300A\u300C\u300E\u3010\u3018\u3016\u301D\u2018\u201C\uFF5F\u00AB]+'),
-        patternSurrogatePair     : new RegExp('(?:[\uD800-\uDBFF][\uDC00-\uDFFF])+'),
-        patternCJKSymbol         : new RegExp('[\u3000-\u303F]+'),
-        patternMathOperator      : new RegExp('[\u2200-\u22FF]+'),
-        patternUnicode6Emoji     : new RegExp([
+    /**
+     * @const
+     */
+    var PATTERNS = {
+        ALPHA             : new RegExp('[a-zA-Z\uFF21-\uFF3A\uFF41-\uFF5A]+'),
+        NUMERIC           : new RegExp('[0-9\uFF10-\uFF19]+'),
+        ALPHANUMERIC      : new RegExp('[a-zA-Z\uFF21-\uFF3A\uFF41-\uFF5A0-9\uFF10-\uFF19]+'),
+        ASCII             : new RegExp('[\u0020-\u007E]+'),
+        HIRAGANA          : new RegExp('[\u3040-\u309F]+'),
+        KATANAKA          : new RegExp('[\u30A0-\u30FF]+'),
+        HANKANA           : new RegExp('[\uFF65-\uFF9F]+'),
+        HALFWIDTH         : new RegExp('[0-9a-zA-Z\u0020-\u007E\uFF61-\uFFDC\uFFE8-\uFFEE]+'),
+        FULLWIDTH         : new RegExp('[^0-9a-zA-Z\u0020-\u007E\uFF61-\uFFDC\uFFE8-\uFFEE]+'),
+        CYRILLIC          : new RegExp('[\u0400-\u052F\u2DE0-\u2DFF\uA640-\uA69F]+'),
+        BLANK             : new RegExp('[\\s\u3000]+'),
+        LINEBREAK         : new RegExp('[\r\n]+'),
+        PAGEBREAK         : new RegExp('[\f]+'),
+        CONTROLCODE       : new RegExp('[\u0000-\u001F\u007F]+'),
+        OPENINGBRACKET    : new RegExp('[\\[}("\'\uFF08\uFF5B\u3014\u3008\u300A\u300C\u300E\u3010\u3018\u3016\u301D\u2018\u201C\uFF5F\u00AB]+'),
+        CLOSINGBRACKET    : new RegExp('[\\]})"\'\uFF09\uFF5D\u3015\u3009\u300B\u300D\u300F\u3011\u3019\u3017\u301F\u2019\u201D\uFF60\u00BB]+'),
+        HYPHEN            : new RegExp('[\u30FC\u30A0\u2013\u301C\uFF5E-]+'),
+        ELLIPSIS          : new RegExp('[\u2024-\u2027]'),
+        PUNCTUATION       : new RegExp('[.,\uFF61\u3002\uFF0E\u002E\u3001\uFF0C]+'),
+        NOTPERMITTEDSTART : new RegExp('[\\]}):;/!?.,\uFF09\u3002\uFF5D\u3001\u3015\u3009\u300B\u300D\u300F\u3011\u3019\u3017\u301F\u2019\u201D\uFF60\u00BB\u30FB\u30A0\u2013\u301C\uFF5E\uFF1F\uFF01\u203C\u2047\u2048\u2049‐]+'),
+        NOTPERMITTEDEND   : new RegExp('[\\[}(\uFF08\uFF5B\u3014\u3008\u300A\u300C\u300E\u3010\u3018\u3016\u301D\u2018\u201C\uFF5F\u00AB]+'),
+        SURROGATEPAIR     : new RegExp('(?:[\uD800-\uDBFF][\uDC00-\uDFFF])+'),
+        CJKSYMBOL         : new RegExp('[\u3000-\u303F]+'),
+        MATHOPERATOR      : new RegExp('[\u2200-\u22FF]+'),
+        UNICODE6EMOJI     : new RegExp([
             '(?:[\u00A9\u00AE\u2002\u2003\u2005\u203C\u2049\u2122\u2139\u2194-\u2199\u21A9\u21AA\u231A\u231B',
             '\u23E9-\u23EC\u23F0\u23F3\u24C2\u25AA\u25AB\u25B6\u25C0\u25FB-\u25FE\u2600\u2601\u260E\u2611',
             '\u2614\u2615\u261D\u263A\u2648-\u2653\u2660\u2663\u2665\u2666\u2668\u267B\u267F\u2693\u26A0\u26A1',
@@ -47,6 +48,8 @@
         ].join(''))
     };
 
+    var hasDefineProperty = (typeof Object.defineProperty === 'function' && typeof Object.defineProperties === 'function');
+
     var F = {
 
         /**
@@ -56,7 +59,7 @@
          * @returns {boolean}
          */
         match: function (pattern, str) {
-            var result = pattern.exec(str);
+            var result = PATTERNS.exec(str);
             //console.log(str, pattern, result);//, result[0].length, str.length);
             if (result === null) { return false; }
             return (result[0].length === str.length);
@@ -69,7 +72,7 @@
          * @returns {boolean}
          */
         search: function (pattern, str) {
-            return pattern.test(str);
+            return PATTERNS.test(str);
         },
 
         /**
@@ -79,7 +82,7 @@
          * @param {function} descriptor
          */
         extend: function(obj, prop, descriptor) {
-            if (_.hasDefineProperty) {
+            if (hasDefineProperty === true) {
                 Object.defineProperty(obj, prop, {
                     enumerable: false,
                     configurable: false,
@@ -96,7 +99,7 @@
     var Unikong = function(){};
 
     Unikong.prototype = {
-
+        
         /**
          * 文字列リテラルに変換
          * @param {string} str
@@ -117,7 +120,7 @@
          * @returns {string}
          */
         normalizeLinebreak: function(str, breakCode){
-            return str.split(_.patternLineBreak).join(
+            return str.split(PATTERNS.LINEBREAK).join(
                 (arguments.length <= 1) ? '\n' : breakCode
             );
         },
@@ -129,7 +132,7 @@
          * @returns {string}
          */
         stripSurrogatePair: function(str, replaceStr){
-            return str.replace(_.patternSurrogatePair,
+            return str.replace(PATTERNS.SURROGATEPAIR,
                 (arguments.length <= 1) ? '' : replaceStr
             );
         },
@@ -141,7 +144,7 @@
          * @returns {string}
          */
         stripUnicode6Emoji: function(str, replaceStr){
-            return str.replace(_.patternUnicode6Emoji,
+            return str.replace(PATTERNS.UNICODE6EMOJI,
                 (arguments.length <= 1) ? '' : replaceStr
             );
         },
@@ -152,7 +155,7 @@
          * @returns {boolean}
          */
         isAlpha: function(str){
-            return F.match(_.patternAlpha, str);
+            return F.match(PATTERNS.ALPHA, str);
         },
 
         /**
@@ -161,7 +164,7 @@
          * @returns {boolean}
          */
         isNumeric: function(str){
-            return F.match(_.patternNumeric, str);
+            return F.match(PATTERNS.NUMERIC, str);
         },
 
         /**
@@ -170,7 +173,7 @@
          * @returns {boolean}
          */
         isAlphaNumeric: function(str){
-            return F.match(_.patternAlphaNumeric, str);
+            return F.match(PATTERNS.AlphaNumeric, str);
         },
 
         /**
@@ -179,7 +182,7 @@
          * @returns {boolean}
          */
         isAscii: function(str){
-            return F.match(_.patternAscii, str);
+            return F.match(PATTERNS.ASCII, str);
         },
 
         /**
@@ -188,7 +191,7 @@
          * @returns {boolean}
          */
         isHiragana: function(str){
-            return F.match(_.patternHiragana, str);
+            return F.match(PATTERNS.HIRAGANA, str);
         },
 
         /**
@@ -197,7 +200,7 @@
          * @returns {boolean}
          */
         isKatakana: function(str){
-            return F.match(_.patternKatanaka, str);
+            return F.match(PATTERNS.KATANAKA, str);
         },
 
         /**
@@ -206,7 +209,7 @@
          * @returns {boolean}
          */
         isHankana: function(str){
-            return F.match(_.patternHanKana, str);
+            return F.match(PATTERNS.HANKANA, str);
         },
 
         /**
@@ -215,7 +218,7 @@
          * @returns {boolean}
          */
         isHalfWidth: function(str){
-            return F.match(_.patternHalfWidth, str);
+            return F.match(PATTERNS.HALFWIDTH, str);
         },
 
         /**
@@ -224,7 +227,7 @@
          * @returns {boolean}
          */
         isFullWidth: function(str){
-            return F.match(_.patternFullWidth, str);
+            return F.match(PATTERNS.FULLWIDTH, str);
         },
 
         /**
@@ -233,7 +236,7 @@
          * @returns {boolean}
          */
         isCyrillic: function(str){
-            return F.match(_.patternCyrillic, str);
+            return F.match(PATTERNS.CYRILLIC, str);
         },
 
         /**
@@ -242,7 +245,7 @@
          * @returns {boolean}
          */
         isContralCode: function(str){
-            return F.match(_.patternControlCode, str);
+            return F.match(PATTERNS.CONTROLCODE, str);
         },
 
         /**
@@ -251,7 +254,7 @@
          * @returns {boolean}
          */
         isLineBreak: function(str){
-            return F.match(_.patternLineBreak, str);
+            return F.match(PATTERNS.LINEBREAK, str);
         },
 
         /**
@@ -260,7 +263,7 @@
          * @returns {boolean}
          */
         isPageBreak: function(str){
-            return F.match(_.patternPageBreak, str);
+            return F.match(PATTERNS.PAGEBREAK, str);
         },
 
         /**
@@ -269,7 +272,7 @@
          * @returns {boolean}
          */
         isBlank: function(str){
-            return str.length === 0 || F.match(_.patternBlank, str);
+            return str.length === 0 || F.match(PATTERNS.BLANK, str);
         },
 
         /**
@@ -278,7 +281,7 @@
          * @returns {boolean}
          */
         isOpeningBracket: function(str){
-            return F.match(_.patternOpeningBracket, str);
+            return F.match(PATTERNS.OPENINGBRACKET, str);
         },
 
         /**
@@ -287,7 +290,7 @@
          * @returns {boolean}
          */
         isClosingBracket: function(str){
-            return F.match(_.patternClosingBracket, str);
+            return F.match(PATTERNS.CLOSINGBRACKET, str);
         },
 
         /**
@@ -296,7 +299,7 @@
          * @returns {boolean}
          */
         isHyphen: function(str){
-            return F.match(_.patternHyphen, str);
+            return F.match(PATTERNS.HYPHEN, str);
         },
 
         /**
@@ -305,7 +308,7 @@
          * @returns {boolean}
          */
         isPunctuation: function(str){
-            return F.match(_.patternPunctuation, str);
+            return F.match(PATTERNS.PUNCTUATION, str);
         },
 
         /**
@@ -314,7 +317,7 @@
          * @returns {boolean}
          */
         isEllipsis: function(str){
-            return F.match(_.patternEllipsis, str);
+            return F.match(PATTERNS.ELLIPSIS, str);
         },
 
         /**
@@ -323,7 +326,7 @@
          * @returns {boolean}
          */
         isNotPermittedStart : function(str){
-            return F.match(_.patternNotPermittedStart, str);
+            return F.match(PATTERNS.NOTPERMITTEDSTART, str);
         },
 
         /**
@@ -332,7 +335,7 @@
          * @returns {boolean}
          */
         isNotPermittedEnd: function(str){
-            return F.match(_.patternNotPermittedEnd, str);
+            return F.match(PATTERNS.NOTPERMITTEDEND, str);
         },
 
         /**
@@ -341,7 +344,7 @@
          * @returns {boolean}
          */
         isSurrogatePair: function(str){
-            return F.match(_.patternSurrogatePair, str);
+            return F.match(PATTERNS.SURROGATEPAIR, str);
         },
 
         /**
@@ -350,7 +353,7 @@
          * @returns {boolean}
          */
         isUnicode6Emoji: function(str){
-            return F.match(_.patternUnicode6Emoji, str);
+            return F.match(PATTERNS.UNICODE6EMOJI, str);
         },
 
         /**
@@ -359,7 +362,7 @@
          * @returns {boolean}
          */
         hasAlpha: function(str){
-            return F.search(_.patternAlpha, str);
+            return F.search(PATTERNS.ALPHA, str);
         },
 
         /**
@@ -368,7 +371,7 @@
          * @returns {boolean}
          */
         hasNumeric: function(str){
-            return F.search(_.patternNumeric, str);
+            return F.search(PATTERNS.NUMERIC, str);
         },
 
         /**
@@ -377,7 +380,7 @@
          * @returns {boolean}
          */
         hasAlphaNumeric: function(str){
-            return F.search(_.patternAlphaNumeric, str);
+            return F.search(PATTERNS.ALPHANUMERIC, str);
         },
 
         /**
@@ -386,7 +389,7 @@
          * @returns {boolean}
          */
         hasAscii: function(str){
-            return F.search(_.patternAscii, str);
+            return F.search(PATTERNS.ASCII, str);
         },
 
         /**
@@ -395,7 +398,7 @@
          * @returns {boolean}
          */
         hasHiragana: function(str){
-            return F.search(_.patternHiragana, str);
+            return F.search(PATTERNS.HIRAGANA, str);
         },
 
         /**
@@ -404,7 +407,7 @@
          * @returns {boolean}
          */
         hasKatakana: function(str){
-            return F.search(_.patternKatanaka, str);
+            return F.search(PATTERNS.KATANAKA, str);
         },
 
         /**
@@ -413,7 +416,7 @@
          * @returns {boolean}
          */
         hasHankana: function(str){
-            return F.search(_.patternHanKana, str);
+            return F.search(PATTERNS.HANKANA, str);
         },
 
         /**
@@ -422,7 +425,7 @@
          * @returns {boolean}
          */
         hasHalfWidth: function(str){
-            return F.search(_.patternHalfWidth, str);
+            return F.search(PATTERNS.HALFWIDTH, str);
         },
 
         /**
@@ -431,7 +434,7 @@
          * @returns {boolean}
          */
         hasFullWidth: function(str){
-            return F.search(_.patternFullWidth, str);
+            return F.search(PATTERNS.FULLWIDTH, str);
         },
 
         /**
@@ -440,7 +443,7 @@
          * @returns {boolean}
          */
         hasCyrillic: function(str){
-            return F.search(_.patternCyrillic, str);
+            return F.search(PATTERNS.CYRILLIC, str);
         },
 
         /**
@@ -449,7 +452,7 @@
          * @returns {boolean}
          */
         hasContralCode: function(str){
-            return F.search(_.patternControlCode, str);
+            return F.search(PATTERNS.CONTROLCODE, str);
         },
 
         /**
@@ -458,7 +461,7 @@
          * @returns {boolean}
          */
         hasLineBreak: function(str){
-            return F.search(_.patternLineBreak, str);
+            return F.search(PATTERNS.LINEBREAK, str);
         },
 
         /**
@@ -467,7 +470,7 @@
          * @returns {boolean}
          */
         hasPageBreak: function(str){
-            return F.search(_.patternPageBreak, str);
+            return F.search(PATTERNS.PAGEBREAK, str);
         },
 
         /**
@@ -476,7 +479,7 @@
          * @returns {boolean}
          */
         hasBlank: function(str){
-            return str.length === 0 || F.search(_.patternBlank, str);
+            return str.length === 0 || F.search(PATTERNS.BLANK, str);
         },
 
         /**
@@ -485,7 +488,7 @@
          * @returns {boolean}
          */
         hasOpeningBracket: function(str){
-            return F.search(_.patternOpeningBracket, str);
+            return F.search(PATTERNS.OPENINGBRACKET, str);
         },
 
         /**
@@ -494,7 +497,7 @@
          * @returns {boolean}
          */
         hasClosingBracket: function(str){
-            return F.search(_.patternClosingBracket, str);
+            return F.search(PATTERNS.CLOSINGBRACKET, str);
         },
 
         /**
@@ -503,7 +506,7 @@
          * @returns {boolean}
          */
         hasHyphen: function(str){
-            return F.search(_.patternHyphen, str);
+            return F.search(PATTERNS.HYPHEN, str);
         },
 
         /**
@@ -512,7 +515,7 @@
          * @returns {boolean}
          */
         hasPunctuation: function(str){
-            return F.search(_.patternPunctuation, str);
+            return F.search(PATTERNS.PUNCTUATION, str);
         },
 
         /**
@@ -521,7 +524,7 @@
          * @returns {boolean}
          */
         hasEllipsis: function(str){
-            return F.search(_.patternEllipsis, str);
+            return F.search(PATTERNS.ELLIPSIS, str);
         },
 
         /**
@@ -530,7 +533,7 @@
          * @returns {boolean}
          */
         hasNotPermittedStart : function(str){
-            return F.search(_.patternNotPermittedStart, str);
+            return F.search(PATTERNS.NOTPERMITTEDSTART, str);
         },
 
         /**
@@ -539,7 +542,7 @@
          * @returns {boolean}
          */
         hasNotPermittedEnd: function(str){
-            return F.search(_.patternNotPermittedEnd, str);
+            return F.search(PATTERNS.NOTPERMITTEDEND, str);
         },
 
         /**
@@ -548,7 +551,7 @@
          * @returns {boolean}
          */
         hasSurrogatePair: function(str){
-            return F.search(_.patternSurrogatePair, str);
+            return F.search(PATTERNS.SURROGATEPAIR, str);
         },
 
         /**
@@ -557,7 +560,7 @@
          * @returns {boolean}
          */
         hasUnicode6Emoji: function(str){
-            return F.search(_.patternUnicode6Emoji, str);
+            return F.search(PATTERNS.UNICODE6EMOJI, str);
         }
 
     };
