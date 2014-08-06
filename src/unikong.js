@@ -1,5 +1,5 @@
 /**
- * Unibose
+ * Unikong
  *
  * @auther 22century
  * @license MIT license.
@@ -93,9 +93,9 @@
 
     };
 
-    var Unibose = function(){};
+    var Unikong = function(){};
 
-    Unibose.prototype = {
+    Unikong.prototype = {
 
         /**
          * 文字列リテラルに変換
@@ -562,6 +562,6 @@
 
     };
 
-    window.Unibose = Unibose;
+    window.Unikong = Unikong;
 
 })(window);
