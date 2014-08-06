@@ -1,5 +1,4 @@
 .DS_Store
-node_modules
 *.iml
 .idea
 npm-debug.log
