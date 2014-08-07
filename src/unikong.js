@@ -11,30 +11,31 @@
      * @const
      */
     var PATTERNS = {
-        ALPHA             : new RegExp('[a-zA-Z\uFF21-\uFF3A\uFF41-\uFF5A]+'),
-        NUMERIC           : new RegExp('[0-9\uFF10-\uFF19]+'),
-        ALPHANUMERIC      : new RegExp('[a-zA-Z\uFF21-\uFF3A\uFF41-\uFF5A0-9\uFF10-\uFF19]+'),
-        ASCII             : new RegExp('[\u0020-\u007E]+'),
-        HIRAGANA          : new RegExp('[\u3040-\u309F]+'),
-        KATANAKA          : new RegExp('[\u30A0-\u30FF]+'),
-        HANKANA           : new RegExp('[\uFF65-\uFF9F]+'),
-        HALFWIDTH         : new RegExp('[0-9a-zA-Z\u0020-\u007E\uFF61-\uFFDC\uFFE8-\uFFEE]+'),
-        FULLWIDTH         : new RegExp('[^0-9a-zA-Z\u0020-\u007E\uFF61-\uFFDC\uFFE8-\uFFEE]+'),
-        CYRILLIC          : new RegExp('[\u0400-\u052F\u2DE0-\u2DFF\uA640-\uA69F]+'),
-        BLANK             : new RegExp('[\\s\u3000]+'),
-        LINEBREAK         : new RegExp('[\r\n]+'),
-        PAGEBREAK         : new RegExp('[\f]+'),
-        CONTROLCODE       : new RegExp('[\u0000-\u001F\u007F]+'),
-        OPENINGBRACKET    : new RegExp('[\\[}("\'\uFF08\uFF5B\u3014\u3008\u300A\u300C\u300E\u3010\u3018\u3016\u301D\u2018\u201C\uFF5F\u00AB]+'),
-        CLOSINGBRACKET    : new RegExp('[\\]})"\'\uFF09\uFF5D\u3015\u3009\u300B\u300D\u300F\u3011\u3019\u3017\u301F\u2019\u201D\uFF60\u00BB]+'),
-        HYPHEN            : new RegExp('[\u30FC\u30A0\u2013\u301C\uFF5E-]+'),
-        ELLIPSIS          : new RegExp('[\u2024-\u2027]'),
-        PUNCTUATION       : new RegExp('[.,\uFF61\u3002\uFF0E\u002E\u3001\uFF0C]+'),
-        NOTPERMITTEDSTART : new RegExp('[\\]}):;/!?.,\uFF09\u3002\uFF5D\u3001\u3015\u3009\u300B\u300D\u300F\u3011\u3019\u3017\u301F\u2019\u201D\uFF60\u00BB\u30FB\u30A0\u2013\u301C\uFF5E\uFF1F\uFF01\u203C\u2047\u2048\u2049‐]+'),
-        NOTPERMITTEDEND   : new RegExp('[\\[}(\uFF08\uFF5B\u3014\u3008\u300A\u300C\u300E\u3010\u3018\u3016\u301D\u2018\u201C\uFF5F\u00AB]+'),
-        SURROGATEPAIR     : new RegExp('(?:[\uD800-\uDBFF][\uDC00-\uDFFF])+'),
-        CJKSYMBOL         : new RegExp('[\u3000-\u303F]+'),
-        MATHOPERATOR      : new RegExp('[\u2200-\u22FF]+'),
+        ALPHA             : new RegExp('[a-zA-Z\uFF21-\uFF3A\uFF41-\uFF5A]', 'gm'),
+        NUMERIC           : new RegExp('[0-9\uFF10-\uFF19]', 'gm'),
+        ALPHANUMERIC      : new RegExp('[a-zA-Z\uFF21-\uFF3A\uFF41-\uFF5A0-9\uFF10-\uFF19]', 'gm'),
+        ASCII             : new RegExp('[\u0020-\u007E]', 'gm'),
+        HIRAGANA          : new RegExp('[\u3040-\u309F]', 'gm'),
+        KATANAKA          : new RegExp('[\u30A0-\u30FF]', 'gm'),
+        HANKANA           : new RegExp('[\uFF65-\uFF9F]', 'gm'),
+        HALFWIDTH         : new RegExp('[0-9a-zA-Z\u0020-\u007E\uFF61-\uFFDC\uFFE8-\uFFEE]', 'gm'),
+        FULLWIDTH         : new RegExp('[^0-9a-zA-Z\u0020-\u007E\uFF61-\uFFDC\uFFE8-\uFFEE]', 'gm'),
+        CYRILLIC          : new RegExp('[\u0400-\u052F\u2DE0-\u2DFF\uA640-\uA69F]', 'gm'),
+        BLANK             : new RegExp('[\\s\u3000]', 'gm'),
+        LINEBREAK         : new RegExp('(?:\r\n|[\r\n])', 'm'),
+        LINEBREAK_ALL     : new RegExp('^[\r\n]+$', 'm'),
+        PAGEBREAK         : new RegExp('[\f]', 'gm'),
+        CONTROLCODE       : new RegExp('[\u0000-\u001F\u007F]', 'gm'),
+        OPENINGBRACKET    : new RegExp('[\\[}("\'\uFF08\uFF5B\u3014\u3008\u300A\u300C\u300E\u3010\u3018\u3016\u301D\u2018\u201C\uFF5F\u00AB]', 'gm'),
+        CLOSINGBRACKET    : new RegExp('[\\]})"\'\uFF09\uFF5D\u3015\u3009\u300B\u300D\u300F\u3011\u3019\u3017\u301F\u2019\u201D\uFF60\u00BB]', 'gm'),
+        HYPHEN            : new RegExp('[\u30FC\u30A0\u2013\u301C\uFF5E-]', 'gm'),
+        ELLIPSIS          : new RegExp('[\u2024-\u2027]', 'gm'),
+        PUNCTUATION       : new RegExp('[.,\uFF61\u3002\uFF0E\u002E\u3001\uFF0C]', 'gm'),
+        NOTPERMITTEDSTART : new RegExp('[\\]}):;/!?.,\uFF09\u3002\uFF5D\u3001\u3015\u3009\u300B\u300D\u300F\u3011\u3019\u3017\u301F\u2019\u201D\uFF60\u00BB\u30FB\u30A0\u2013\u301C\uFF5E\uFF1F\uFF01\u203C\u2047\u2048\u2049‐]', 'gm'),
+        NOTPERMITTEDEND   : new RegExp('[\\[}(\uFF08\uFF5B\u3014\u3008\u300A\u300C\u300E\u3010\u3018\u3016\u301D\u2018\u201C\uFF5F\u00AB]', 'gm'),
+        SURROGATEPAIR     : new RegExp('(?:[\uD800-\uDBFF][\uDC00-\uDFFF])', 'gm'),
+        CJKSYMBOL         : new RegExp('[\u3000-\u303F]', 'gm'),
+        MATHOPERATOR      : new RegExp('[\u2200-\u22FF]', 'gm'),
         UNICODE6EMOJI     : new RegExp([
             '(?:[\u00A9\u00AE\u2002\u2003\u2005\u203C\u2049\u2122\u2139\u2194-\u2199\u21A9\u21AA\u231A\u231B',
             '\u23E9-\u23EC\u23F0\u23F3\u24C2\u25AA\u25AB\u25B6\u25C0\u25FB-\u25FE\u2600\u2601\u260E\u2611',
@@ -44,14 +45,14 @@
             '\u2764\u2795-\u2797\u27A1\u27B0\u2934\u2935\u2B05-\u2B07\u2B1B\u2B1C\u2B50\u2B55\u3030\u303D\u3297\u3299][\uFE0F]?',
             '|[\u0023-\u0039][\uFE0F]?[\u20E3]',
             '|[\uD83C][\uDC04-\uDFF0]',
-            '|[\uD83D][\uDC0C-\uDEC0])+'
-        ].join(''))
+            '|[\uD83D][\uDC0C-\uDEC0])'].join(''), 'gm')
     };
 
     var hasDefineProperty = (typeof Object.defineProperty === 'function' && typeof Object.defineProperties === 'function');
 
-    var F = {
+    var RegexpUtil = function(){};
 
+    RegexpUtil.prototype = {
         /**
          * 完全一致
          * @param {RegExp} pattern
@@ -59,10 +60,10 @@
          * @returns {boolean}
          */
         match: function (pattern, str) {
-            var result = PATTERNS.exec(str);
-            //console.log(str, pattern, result);//, result[0].length, str.length);
-            if (result === null) { return false; }
-            return (result[0].length === str.length);
+            var count = 0;
+            while (pattern.exec(str) !== null) ++count;
+            pattern.lastIndex = 0;
+            return count === ru.count(str);
         },
 
         /**
@@ -72,9 +73,31 @@
          * @returns {boolean}
          */
         search: function (pattern, str) {
-            return PATTERNS.test(str);
+            var ret = pattern.test(str);
+            pattern.lastIndex = 0;
+            return ret;
         },
 
+        /**
+         * サロゲートペアを考慮したカウント
+         * @param {string} str
+         * @returns {number}
+         */
+        count: function (str) {
+            if (!PATTERNS.SURROGATEPAIR.test(str)) {
+                return str.length;
+            } else {
+                var count = 1;
+                while (PATTERNS.SURROGATEPAIR.exec(str) !== null) ++count;
+                PATTERNS.SURROGATEPAIR.lastIndex = 0;
+                return str.length - count;
+            }
+        }
+    };
+
+    var ObjectUtil = function(){};
+
+    ObjectUtil.prototype = {
         /**
          * オブジェクト拡張
          * @param {object} obj
@@ -93,13 +116,23 @@
                 obj[prop] = descriptor;
             }
         }
-
     };
 
-    var Unikong = function(){};
+    var Unikong = function(){},
+        ru = new RegexpUtil(),
+        ou = new ObjectUtil();
 
     Unikong.prototype = {
-        
+
+        /**
+         * サロゲートペアを考慮したカウント
+         * @param {string} str
+         * @returns {number}
+         */
+        count: function (str) {
+            return ru.count.call(this, str);
+        },
+
         /**
          * 文字列リテラルに変換
          * @param {string} str
@@ -155,7 +188,7 @@
          * @returns {boolean}
          */
         isAlpha: function(str){
-            return F.match(PATTERNS.ALPHA, str);
+            return ru.match(PATTERNS.ALPHA, str);
         },
 
         /**
@@ -164,7 +197,7 @@
          * @returns {boolean}
          */
         isNumeric: function(str){
-            return F.match(PATTERNS.NUMERIC, str);
+            return ru.match(PATTERNS.NUMERIC, str);
         },
 
         /**
@@ -173,7 +206,7 @@
          * @returns {boolean}
          */
         isAlphaNumeric: function(str){
-            return F.match(PATTERNS.AlphaNumeric, str);
+            return ru.match(PATTERNS.ALPHANUMERIC, str);
         },
 
         /**
@@ -182,7 +215,7 @@
          * @returns {boolean}
          */
         isAscii: function(str){
-            return F.match(PATTERNS.ASCII, str);
+            return ru.match(PATTERNS.ASCII, str);
         },
 
         /**
@@ -191,7 +224,7 @@
          * @returns {boolean}
          */
         isHiragana: function(str){
-            return F.match(PATTERNS.HIRAGANA, str);
+            return ru.match(PATTERNS.HIRAGANA, str);
         },
 
         /**
@@ -200,7 +233,7 @@
          * @returns {boolean}
          */
         isKatakana: function(str){
-            return F.match(PATTERNS.KATANAKA, str);
+            return ru.match(PATTERNS.KATANAKA, str);
         },
 
         /**
@@ -209,7 +242,7 @@
          * @returns {boolean}
          */
         isHankana: function(str){
-            return F.match(PATTERNS.HANKANA, str);
+            return ru.match(PATTERNS.HANKANA, str);
         },
 
         /**
@@ -218,7 +251,7 @@
          * @returns {boolean}
          */
         isHalfWidth: function(str){
-            return F.match(PATTERNS.HALFWIDTH, str);
+            return ru.match(PATTERNS.HALFWIDTH, str);
         },
 
         /**
@@ -227,7 +260,7 @@
          * @returns {boolean}
          */
         isFullWidth: function(str){
-            return F.match(PATTERNS.FULLWIDTH, str);
+            return ru.match(PATTERNS.FULLWIDTH, str);
         },
 
         /**
@@ -236,7 +269,7 @@
          * @returns {boolean}
          */
         isCyrillic: function(str){
-            return F.match(PATTERNS.CYRILLIC, str);
+            return ru.match(PATTERNS.CYRILLIC, str);
         },
 
         /**
@@ -245,7 +278,7 @@
          * @returns {boolean}
          */
         isContralCode: function(str){
-            return F.match(PATTERNS.CONTROLCODE, str);
+            return ru.match(PATTERNS.CONTROLCODE, str);
         },
 
         /**
@@ -254,7 +287,7 @@
          * @returns {boolean}
          */
         isLineBreak: function(str){
-            return F.match(PATTERNS.LINEBREAK, str);
+            return PATTERNS.LINEBREAK_ALL.test(str);
         },
 
         /**
@@ -263,7 +296,7 @@
          * @returns {boolean}
          */
         isPageBreak: function(str){
-            return F.match(PATTERNS.PAGEBREAK, str);
+            return ru.match(PATTERNS.PAGEBREAK, str);
         },
 
         /**
@@ -272,7 +305,7 @@
          * @returns {boolean}
          */
         isBlank: function(str){
-            return str.length === 0 || F.match(PATTERNS.BLANK, str);
+            return str.length === 0 || ru.match(PATTERNS.BLANK, str);
         },
 
         /**
@@ -281,7 +314,7 @@
          * @returns {boolean}
          */
         isOpeningBracket: function(str){
-            return F.match(PATTERNS.OPENINGBRACKET, str);
+            return ru.match(PATTERNS.OPENINGBRACKET, str);
         },
 
         /**
@@ -290,7 +323,7 @@
          * @returns {boolean}
          */
         isClosingBracket: function(str){
-            return F.match(PATTERNS.CLOSINGBRACKET, str);
+            return ru.match(PATTERNS.CLOSINGBRACKET, str);
         },
 
         /**
@@ -299,7 +332,7 @@
          * @returns {boolean}
          */
         isHyphen: function(str){
-            return F.match(PATTERNS.HYPHEN, str);
+            return ru.match(PATTERNS.HYPHEN, str);
         },
 
         /**
@@ -308,7 +341,7 @@
          * @returns {boolean}
          */
         isPunctuation: function(str){
-            return F.match(PATTERNS.PUNCTUATION, str);
+            return ru.match(PATTERNS.PUNCTUATION, str);
         },
 
         /**
@@ -317,7 +350,7 @@
          * @returns {boolean}
          */
         isEllipsis: function(str){
-            return F.match(PATTERNS.ELLIPSIS, str);
+            return ru.match(PATTERNS.ELLIPSIS, str);
         },
 
         /**
@@ -326,7 +359,7 @@
          * @returns {boolean}
          */
         isNotPermittedStart : function(str){
-            return F.match(PATTERNS.NOTPERMITTEDSTART, str);
+            return ru.match(PATTERNS.NOTPERMITTEDSTART, str);
         },
 
         /**
@@ -335,7 +368,7 @@
          * @returns {boolean}
          */
         isNotPermittedEnd: function(str){
-            return F.match(PATTERNS.NOTPERMITTEDEND, str);
+            return ru.match(PATTERNS.NOTPERMITTEDEND, str);
         },
 
         /**
@@ -344,7 +377,7 @@
          * @returns {boolean}
          */
         isSurrogatePair: function(str){
-            return F.match(PATTERNS.SURROGATEPAIR, str);
+            return ru.match(PATTERNS.SURROGATEPAIR, str);
         },
 
         /**
@@ -353,7 +386,7 @@
          * @returns {boolean}
          */
         isUnicode6Emoji: function(str){
-            return F.match(PATTERNS.UNICODE6EMOJI, str);
+            return ru.match(PATTERNS.UNICODE6EMOJI, str);
         },
 
         /**
@@ -362,7 +395,7 @@
          * @returns {boolean}
          */
         hasAlpha: function(str){
-            return F.search(PATTERNS.ALPHA, str);
+            return ru.search(PATTERNS.ALPHA, str);
         },
 
         /**
@@ -371,7 +404,7 @@
          * @returns {boolean}
          */
         hasNumeric: function(str){
-            return F.search(PATTERNS.NUMERIC, str);
+            return ru.search(PATTERNS.NUMERIC, str);
         },
 
         /**
@@ -380,7 +413,7 @@
          * @returns {boolean}
          */
         hasAlphaNumeric: function(str){
-            return F.search(PATTERNS.ALPHANUMERIC, str);
+            return ru.search(PATTERNS.ALPHANUMERIC, str);
         },
 
         /**
@@ -389,7 +422,7 @@
          * @returns {boolean}
          */
         hasAscii: function(str){
-            return F.search(PATTERNS.ASCII, str);
+            return ru.search(PATTERNS.ASCII, str);
         },
 
         /**
@@ -398,7 +431,7 @@
          * @returns {boolean}
          */
         hasHiragana: function(str){
-            return F.search(PATTERNS.HIRAGANA, str);
+            return ru.search(PATTERNS.HIRAGANA, str);
         },
 
         /**
@@ -407,7 +440,7 @@
          * @returns {boolean}
          */
         hasKatakana: function(str){
-            return F.search(PATTERNS.KATANAKA, str);
+            return ru.search(PATTERNS.KATANAKA, str);
         },
 
         /**
@@ -416,7 +449,7 @@
          * @returns {boolean}
          */
         hasHankana: function(str){
-            return F.search(PATTERNS.HANKANA, str);
+            return ru.search(PATTERNS.HANKANA, str);
         },
 
         /**
@@ -425,7 +458,7 @@
          * @returns {boolean}
          */
         hasHalfWidth: function(str){
-            return F.search(PATTERNS.HALFWIDTH, str);
+            return ru.search(PATTERNS.HALFWIDTH, str);
         },
 
         /**
@@ -434,7 +467,7 @@
          * @returns {boolean}
          */
         hasFullWidth: function(str){
-            return F.search(PATTERNS.FULLWIDTH, str);
+            return ru.search(PATTERNS.FULLWIDTH, str);
         },
 
         /**
@@ -443,7 +476,7 @@
          * @returns {boolean}
          */
         hasCyrillic: function(str){
-            return F.search(PATTERNS.CYRILLIC, str);
+            return ru.search(PATTERNS.CYRILLIC, str);
         },
 
         /**
@@ -452,7 +485,7 @@
          * @returns {boolean}
          */
         hasContralCode: function(str){
-            return F.search(PATTERNS.CONTROLCODE, str);
+            return ru.search(PATTERNS.CONTROLCODE, str);
         },
 
         /**
@@ -461,7 +494,7 @@
          * @returns {boolean}
          */
         hasLineBreak: function(str){
-            return F.search(PATTERNS.LINEBREAK, str);
+            return ru.search(PATTERNS.LINEBREAK, str);
         },
 
         /**
@@ -470,7 +503,7 @@
          * @returns {boolean}
          */
         hasPageBreak: function(str){
-            return F.search(PATTERNS.PAGEBREAK, str);
+            return ru.search(PATTERNS.PAGEBREAK, str);
         },
 
         /**
@@ -479,7 +512,7 @@
          * @returns {boolean}
          */
         hasBlank: function(str){
-            return str.length === 0 || F.search(PATTERNS.BLANK, str);
+            return str.length === 0 || ru.search(PATTERNS.BLANK, str);
         },
 
         /**
@@ -488,7 +521,7 @@
          * @returns {boolean}
          */
         hasOpeningBracket: function(str){
-            return F.search(PATTERNS.OPENINGBRACKET, str);
+            return ru.search(PATTERNS.OPENINGBRACKET, str);
         },
 
         /**
@@ -497,7 +530,7 @@
          * @returns {boolean}
          */
         hasClosingBracket: function(str){
-            return F.search(PATTERNS.CLOSINGBRACKET, str);
+            return ru.search(PATTERNS.CLOSINGBRACKET, str);
         },
 
         /**
@@ -506,7 +539,7 @@
          * @returns {boolean}
          */
         hasHyphen: function(str){
-            return F.search(PATTERNS.HYPHEN, str);
+            return ru.search(PATTERNS.HYPHEN, str);
         },
 
         /**
@@ -515,7 +548,7 @@
          * @returns {boolean}
          */
         hasPunctuation: function(str){
-            return F.search(PATTERNS.PUNCTUATION, str);
+            return ru.search(PATTERNS.PUNCTUATION, str);
         },
 
         /**
@@ -524,7 +557,7 @@
          * @returns {boolean}
          */
         hasEllipsis: function(str){
-            return F.search(PATTERNS.ELLIPSIS, str);
+            return ru.search(PATTERNS.ELLIPSIS, str);
         },
 
         /**
@@ -533,7 +566,7 @@
          * @returns {boolean}
          */
         hasNotPermittedStart : function(str){
-            return F.search(PATTERNS.NOTPERMITTEDSTART, str);
+            return ru.search(PATTERNS.NOTPERMITTEDSTART, str);
         },
 
         /**
@@ -542,7 +575,7 @@
          * @returns {boolean}
          */
         hasNotPermittedEnd: function(str){
-            return F.search(PATTERNS.NOTPERMITTEDEND, str);
+            return ru.search(PATTERNS.NOTPERMITTEDEND, str);
         },
 
         /**
@@ -551,7 +584,7 @@
          * @returns {boolean}
          */
         hasSurrogatePair: function(str){
-            return F.search(PATTERNS.SURROGATEPAIR, str);
+            return ru.search(PATTERNS.SURROGATEPAIR, str);
         },
 
         /**
@@ -560,7 +593,7 @@
          * @returns {boolean}
          */
         hasUnicode6Emoji: function(str){
-            return F.search(PATTERNS.UNICODE6EMOJI, str);
+            return ru.search(PATTERNS.UNICODE6EMOJI, str);
         }
 
     };
