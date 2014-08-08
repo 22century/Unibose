@@ -2,734 +2,379 @@
 
     var unikong = new Unikong();
 
+    function equal (method, result, var_args) {
+        var args = Array.prototype.slice.call(arguments);
+        args.splice(0,2);
+        it (args.toString() + ' to equal ' + result, function () {
+            expect(method.apply(this, args)).toEqual(result);
+        });
+    }
+
     describe('count', function () {
-
-        it('to be truthy.', function () {
-            expect(unikong.count('𡉴𡉴𡉴\nあ𡉴')).toBe(6);
-        });
-
-        it('number + hiragana', function () {
-            expect(unikong.count('123456789あ')).toBe(10);
-        });
-
+        equal.call(this, unikong.count, 6 , '𡉴𡉴𡉴\nあ𡉴');
+        equal.call(this, unikong.count, 10, '123456789あ');
     });
 
     describe('toUnicodeLiteral', function() {
-
-        it('alpha', function() {
-            expect(unikong.toUnicodeLiteral('abc')).toBe('\\u0061\\u0062\\u0063');
-        });
-
+        equal.call(this, unikong.toUnicodeLiteral, '\\u0061\\u0062\\u0063', 'abc');
     });
 
     describe('normalizeLinebreak', function() {
-
-        it('to \\n', function() {
-            expect(unikong.normalizeLinebreak('aa\raa')).toBe('aa\naa');
-            expect(unikong.normalizeLinebreak('aa\r\naa','\n')).toBe('aa\naa');
-        });
-
-        it('to \\r', function() {
-            expect(unikong.normalizeLinebreak('aa\r\na\na', '\r')).toBe('aa\ra\ra');
-            expect(unikong.normalizeLinebreak('aa\na\r\n\r\na', '\r')).toBe('aa\ra\r\ra');
-        });
-
-        it('to \\r\\n', function() {
-            expect(unikong.normalizeLinebreak('aa\r\naa', '\r\n')).toBe('aa\r\naa');
-            expect(unikong.normalizeLinebreak('aa\na\r\n\r\na', '\r\n')).toBe('aa\r\na\r\n\r\na');
-        });
-
+        equal.call(this, unikong.normalizeLinebreak, 'aa\naa', 'aa\raa');
+        equal.call(this, unikong.normalizeLinebreak, 'aa\naa', 'aa\r\naa','\n');
+        equal.call(this, unikong.normalizeLinebreak, 'aa\ra\r\ra', 'aa\na\r\n\r\na', '\r');
+        equal.call(this, unikong.normalizeLinebreak, 'aa\r\na\r\n\r\na', 'aa\na\r\n\r\na', '\r\n');
     });
 
     describe('stripSurrogatePair', function() {
-
-        it('surrogatepair', function() {
-            expect(unikong.stripSurrogatePair('123𡉴𡧃456')).toBe('123456');
-            expect(unikong.stripSurrogatePair('_ABC龠𡉴𡧃＠＊')).toBe('_ABC龠＠＊');
-            expect(unikong.stripSurrogatePair('𡉴𡉴𡧃456𡉴𡉴𡉴', '□')).toBe('□□□456□□□');
-        });
-
-        it('number', function() {
-            expect(unikong.stripSurrogatePair('123456')).toBe('123456');
-        });
-
-        it('hiragana', function() {
-            expect(unikong.stripSurrogatePair('あいう')).toBe('あいう');
-        });
-
+        equal.call(this, unikong.stripSurrogatePair, '123456', '123𡉴𡧃456');
+        equal.call(this, unikong.stripSurrogatePair, '_ABC龠＠＊', '_ABC龠𡉴𡧃＠＊');
+        equal.call(this, unikong.stripSurrogatePair, '□□□456□□□', '𡉴𡉴𡧃456𡉴𡉴𡉴', '□');
+        equal.call(this, unikong.stripSurrogatePair, '123456', '123456');
+        equal.call(this, unikong.stripSurrogatePair, 'あいう', 'あいう');
     });
 
     describe('stripUnicode6Emoji', function() {
-
-        it('empty', function() {
-            expect(unikong.stripUnicode6Emoji('😀')).toBe('');
-            expect(unikong.stripUnicode6Emoji('\u2195\uFE0F\u0032\uFE0F\u20E3\u274C')).toBe('');
-            expect(unikong.stripUnicode6Emoji('\uD83D\uDC40\uD83D\uDC4D\uD83D\uDE8C\uD83D\uDCBF\u2195\uFE0F\u0032\uFE0F\u20E3\u274C')).toBe('');
-        });
-
-        it('number', function() {
-            expect(unikong.stripUnicode6Emoji('0🌊1')).toBe('01');
-        });
-
-        it('surrogatepair', function() {
-            expect(unikong.stripUnicode6Emoji('𡉴🐰𡉴')).toBe('𡉴𡉴');
-        });
-
+        equal.call(this, unikong.stripUnicode6Emoji, '', '😀');
+        equal.call(this, unikong.stripUnicode6Emoji, '', '\u2195\uFE0F\u0032\uFE0F\u20E3\u274C');
+        equal.call(this, unikong.stripUnicode6Emoji, '', '\uD83D\uDC40\uD83D\uDC4D\uD83D\uDE8C\uD83D\uDCBF\u2195\uFE0F\u0032\uFE0F\u20E3\u274C');
+        equal.call(this, unikong.stripUnicode6Emoji, '01', '0🌊1');
+        equal.call(this, unikong.stripUnicode6Emoji, '𡉴𡉴', '𡉴🐰𡉴');
     });
 
     describe('isAlpha', function() {
-
-        it('to be truthy.', function() {
-            expect(unikong.isAlpha('abcZ')).toBe(true);
-            expect(unikong.isAlpha('abcZあ')).toBe(false);
-            expect(unikong.isAlpha('ＡＢＣＺ')).toBe(true);
-            expect(unikong.isAlpha('aaaaaa')).toBe(true);
-        });
-
-        it('to be falsy.', function() {
-            expect(unikong.isAlpha('あいう')).toBe(false);
-            expect(unikong.isAlpha('1A')).toBe(false);
-        });
-
+        equal.call(this, unikong.isAlpha, true, 'abcZ');
+        equal.call(this, unikong.isAlpha, false, 'abcZあ');
+        equal.call(this, unikong.isAlpha, true, 'ＡＢＣＺ');
+        equal.call(this, unikong.isAlpha, true, 'aaaaaa');
+        equal.call(this, unikong.isAlpha, false, 'あいう');
+        equal.call(this, unikong.isAlpha, false, '1A');
     });
 
     describe('isNumeric', function() {
-
-        it('to be truthy.', function() {
-            expect(unikong.isNumeric('012345')).toBe(true);
-            expect(unikong.isNumeric('01233333')).toBe(true);
-            expect(unikong.isNumeric('０１２３４５')).toBe(true);
-        });
-
-        it('to be falsy.', function() {
-            expect(unikong.isNumeric('０あ')).toBe(false);
-            expect(unikong.isNumeric('1A')).toBe(false);
-        });
-
+        equal.call(this, unikong.isNumeric, true, '012345');
+        equal.call(this, unikong.isNumeric, true, '01233333');
+        equal.call(this, unikong.isNumeric, true, '０１２３４５');
+        equal.call(this, unikong.isNumeric, false, '０あ');
+        equal.call(this, unikong.isNumeric, false, '1A');
     });
 
     describe('isAlphaNumeric', function() {
-
-        it('to be truthy.', function() {
-            expect(unikong.isAlphaNumeric('012ABZ')).toBe(true);
-            expect(unikong.isAlphaNumeric('０１２a４５Ｚ')).toBe(true);
-        });
-
-        it('to be falsy.', function() {
-            expect(unikong.isAlphaNumeric('０あ')).toBe(false);
-            expect(unikong.isAlphaNumeric('1A_')).toBe(false);
-        });
-
+        equal.call(this, unikong.isAlphaNumeric, true, '012ABZ');
+        equal.call(this, unikong.isAlphaNumeric, true, '０１２a４５Ｚ');
+        equal.call(this, unikong.isAlphaNumeric, false, '０あ');
+        equal.call(this, unikong.isAlphaNumeric, false, '1A_');
     });
 
     describe('isAscii', function() {
-
-        it('to be truthy.', function() {
-            expect(unikong.isAscii('012ABZ')).toBe(true);
-            expect(unikong.isAscii('1A!?-)_')).toBe(true);
-
-        });
-
-        it('to be falsy.', function() {
-            expect(unikong.isAscii('０あ')).toBe(false);
-            expect(unikong.isAscii('０１２a４５Ｚ')).toBe(false);
-        });
-
+        equal.call(this, unikong.isAscii, true, '012ABZ');
+        equal.call(this, unikong.isAscii, true, '1A!?-)_');
+        equal.call(this, unikong.isAscii, false, '０あ');
+        equal.call(this, unikong.isAscii, false, '０１２a４５Ｚ');
     });
 
     describe('isHiragana', function() {
-
-        it('to be truthy.', function() {
-            expect(unikong.isHiragana('いろは')).toBe(true);
-            expect(unikong.isHiragana('あわをん')).toBe(true);
-        });
-
-        it('to be falsy.', function() {
-            expect(unikong.isHiragana('1A_-?!')).toBe(false);
-            expect(unikong.isHiragana('アヲ')).toBe(false);
-        });
-
+        equal.call(this, unikong.isHiragana, true, 'いろは');
+        equal.call(this, unikong.isHiragana, true, 'あわをん');
+        equal.call(this, unikong.isHiragana, false, '1A_-?!');
+        equal.call(this, unikong.isHiragana, false, 'アヲ');
     });
 
     describe('isKatakana', function() {
-
-        it('to be truthy.', function() {
-            expect(unikong.isKatakana('アヲ')).toBe(true);
-            expect(unikong.isKatakana('ザガポド')).toBe(true);
-        });
-
-        it('to be falsy.', function() {
-            expect(unikong.isKatakana('09')).toBe(false);
-            expect(unikong.isKatakana('AZ')).toBe(false);
-            expect(unikong.isKatakana('あを')).toBe(false);
-        });
-
+        equal.call(this, unikong.isKatakana, true, 'アヲ');
+        equal.call(this, unikong.isKatakana, true, 'ザガポド');
+        equal.call(this, unikong.isKatakana, false, '09');
+        equal.call(this, unikong.isKatakana, false, 'AZ');
+        equal.call(this, unikong.isKatakana, false, 'あを');
     });
 
     describe('isHankana', function() {
-
-        it('to be truthy.', function() {
-            expect(unikong.isHankana('ｱ')).toBe(true);
-            expect(unikong.isHankana('ｲｦﾝ')).toBe(true);
-            expect(unikong.isHankana('ｻﾞｼﾞﾂﾞ')).toBe(true);
-            expect(unikong.isHankana('ｬｭｮ')).toBe(true);
-        });
-
-        it('to be falsy.', function() {
-            expect(unikong.isHankana('09')).toBe(false);
-            expect(unikong.isHankana('AZ')).toBe(false);
-            expect(unikong.isHankana('あを')).toBe(false);
-            expect(unikong.isHankana('アヲ')).toBe(false);
-            expect(unikong.isHankana('ザガポド')).toBe(false);
-        });
-
+        equal.call(this, unikong.isHankana, true, 'ｱ');
+        equal.call(this, unikong.isHankana, true, 'ｲｦﾝ');
+        equal.call(this, unikong.isHankana, true, 'ｻﾞｼﾞﾂﾞ');
+        equal.call(this, unikong.isHankana, true, 'ｬｭｮ');
+        equal.call(this, unikong.isHankana, false, '09');
+        equal.call(this, unikong.isHankana, false, 'AZ');
+        equal.call(this, unikong.isHankana, false, 'あを');
+        equal.call(this, unikong.isHankana, false, 'アヲ');
+        equal.call(this, unikong.isHankana, false, 'ザガポド');
     });
 
     describe('isHalfWidth', function() {
-
-        it('to be truthy.', function() {
-            expect(unikong.isHalfWidth('ｱ')).toBe(true);
-            expect(unikong.isHalfWidth('ｻﾞｼﾞﾂﾞ')).toBe(true);
-            expect(unikong.isHalfWidth('ｬｭｮ_-[')).toBe(true);
-            expect(unikong.isHalfWidth('A09Z@')).toBe(true);
-        });
-
-        it('to be falsy.', function() {
-            expect(unikong.isHalfWidth('あを')).toBe(false);
-            expect(unikong.isHalfWidth('アヲ')).toBe(false);
-            expect(unikong.isHalfWidth('ー＠')).toBe(false);
-        });
-
+        equal.call(this, unikong.isHalfWidth, true, 'ｱ');
+        equal.call(this, unikong.isHalfWidth, true, 'ｻﾞｼﾞﾂﾞ');
+        equal.call(this, unikong.isHalfWidth, true, 'ｬｭｮ_-[');
+        equal.call(this, unikong.isHalfWidth, true, 'A09Z@');
+        equal.call(this, unikong.isHalfWidth, false, 'あを');
+        equal.call(this, unikong.isHalfWidth, false, 'アヲ');
+        equal.call(this, unikong.isHalfWidth, false, 'ー＠');
     });
 
     describe('isFullWidth', function() {
-
-        it('to be truthy.', function() {
-            expect(unikong.isFullWidth('あを')).toBe(true);
-            expect(unikong.isFullWidth('アヲ')).toBe(true);
-            expect(unikong.isFullWidth('ー＠')).toBe(true);
-            expect(unikong.isFullWidth('南無阿弥陀仏')).toBe(true);
-        });
-
-        it('to be falsy.', function() {
-            expect(unikong.isFullWidth('ｱ')).toBe(false);
-            expect(unikong.isFullWidth('ｻﾞｼﾞﾂﾞ')).toBe(false);
-            expect(unikong.isFullWidth('ｬｭｮ_-[')).toBe(false);
-            expect(unikong.isFullWidth('A09Z@')).toBe(false);
-        });
-
+        equal.call(this, unikong.isFullWidth, true, 'あを');
+        equal.call(this, unikong.isFullWidth, true, 'アヲ');
+        equal.call(this, unikong.isFullWidth, true, 'ー＠');
+        equal.call(this, unikong.isFullWidth, true, '南無阿弥陀仏');
+        equal.call(this, unikong.isFullWidth, false, 'ｱ');
+        equal.call(this, unikong.isFullWidth, false, 'ｻﾞｼﾞﾂﾞ');
+        equal.call(this, unikong.isFullWidth, false, 'ｬｭｮ_-[');
+        equal.call(this, unikong.isFullWidth, false, 'A09Z@');
     });
 
     describe('isLineBreak', function() {
-
-        it('to be truthy.', function() {
-//            expect(unikong.isLineBreak('\n')).toBe(true);
-            expect(unikong.isLineBreak('\r\n')).toBe(true);
-        });
-
-//        it('to be falsy.', function() {
-//            expect(unikong.isLineBreak('A\nB')).toBe(false);
-//            expect(unikong.isLineBreak('\t')).toBe(false);
-//        });
-
+        equal.call(this, unikong.isLineBreak, true, '\n');
+        equal.call(this, unikong.isLineBreak, true, '\r\n');
+        equal.call(this, unikong.isLineBreak, false, 'A\nB');
+        equal.call(this, unikong.isLineBreak, false, '\t');
     });
 
     describe('isCyrillic', function() {
-
-        it('to be truthy.', function() {
-            expect(unikong.isCyrillic('БДБ')).toBe(true);
-            expect(unikong.isCyrillic('Урааааааа')).toBe(true);
-        });
-
-        it('to be falsy.', function() {
-            expect(unikong.isCyrillic('あを')).toBe(false);
-            expect(unikong.isCyrillic('Ypa')).toBe(false);
-        });
-
+        equal.call(this, unikong.isCyrillic, true, 'БДБ');
+        equal.call(this, unikong.isCyrillic, true, 'Урааааааа');
+        equal.call(this, unikong.isCyrillic, false, 'あを');
+        equal.call(this, unikong.isCyrillic, false, 'Ypa');
     });
 
     describe('isBlank', function() {
-
-        it('to be truthy.', function() {
-            expect(unikong.isBlank('\t')).toBe(true);
-            expect(unikong.isBlank('　')).toBe(true);
-            expect(unikong.isBlank('\n')).toBe(true);
-        });
-
-        it('to be falsy.', function() {
-            expect(unikong.isBlank('_')).toBe(false);
-            expect(unikong.isBlank('1 a')).toBe(false);
-        });
-
+        equal.call(this, unikong.isBlank, true, '\t');
+        equal.call(this, unikong.isBlank, true, '　');
+        equal.call(this, unikong.isBlank, true, '\n');
+        equal.call(this, unikong.isBlank, false, '_');
+        equal.call(this, unikong.isBlank, false, '1 a');
     });
 
     describe('isContralCode', function() {
-
-        it('to be truthy.', function() {
-            expect(unikong.isContralCode('\u0000\u007F')).toBe(true);
-            expect(unikong.isContralCode('\u0005')).toBe(true);
-        });
-
-        it('to be falsy.', function() {
-            expect(unikong.isContralCode('_-')).toBe(false);
-            expect(unikong.isContralCode(' ')).toBe(false);
-        });
-
+        equal.call(this, unikong.isContralCode, true, '\u0000\u007F');
+        equal.call(this, unikong.isContralCode, true, '\u0005');
+        equal.call(this, unikong.isContralCode, false, '_-');
+        equal.call(this, unikong.isContralCode, false, ' ');
     });
 
     describe('isPageBreak', function() {
-
-        it('to be truthy.', function() {
-            expect(unikong.isPageBreak('\f')).toBe(true);
-        });
-
-        it('to be falsy.', function() {
-            expect(unikong.isPageBreak('\r')).toBe(false);
-            expect(unikong.isPageBreak('\t')).toBe(false);
-        });
-
+        equal.call(this, unikong.isPageBreak, true, '\f');
+        equal.call(this, unikong.isPageBreak, false, '\r');
+        equal.call(this, unikong.isPageBreak, false, '\t');
     });
 
     describe('isOpeningBracket', function() {
-
-        it('to be truthy.', function() {
-            expect(unikong.isOpeningBracket('「')).toBe(true);
-        });
-
-        it('to be falsy.', function() {
-            expect(unikong.isOpeningBracket('」')).toBe(false);
-        });
-
+        equal.call(this, unikong.isOpeningBracket, true, '「');
+        equal.call(this, unikong.isOpeningBracket, false, '」');
     });
 
     describe('isClosingBracket', function() {
-
-        it('to be truthy.', function() {
-            expect(unikong.isClosingBracket(']')).toBe(true);
-        });
-
-        it('to be falsy.', function() {
-            expect(unikong.isClosingBracket('[')).toBe(false);
-        });
-
+        equal.call(this, unikong.isClosingBracket, true, ']');
+        equal.call(this, unikong.isClosingBracket, false, '[');
     });
 
     describe('isHyphen', function() {
-
-        it('to be truthy.', function() {
-            expect(unikong.isHyphen('-')).toBe(true);
-            expect(unikong.isHyphen('〜')).toBe(true);
-        });
-
-        it('to be falsy.', function() {
-            expect(unikong.isHyphen('＝')).toBe(false);
-        });
-
+        equal.call(this, unikong.isHyphen, true, '-');
+        equal.call(this, unikong.isHyphen, true, '〜');
+        equal.call(this, unikong.isHyphen, false, '＝');
     });
 
     describe('isPunctuation', function() {
-
-        it('to be truthy.', function() {
-            expect(unikong.isPunctuation('、')).toBe(true);
-            expect(unikong.isPunctuation('。')).toBe(true);
-        });
-
-        it('to be falsy.', function() {
-            expect(unikong.isHyphen('＊')).toBe(false);
-        });
-
+        equal.call(this, unikong.isPunctuation, true, '、');
+        equal.call(this, unikong.isPunctuation, true, '。');
+        equal.call(this, unikong.isHyphen, false, '＊');
     });
 
     describe('isEllipsis', function() {
-
-        it('to be truthy.', function() {
-            expect(unikong.isEllipsis('…')).toBe(true);
-        });
-
-        it('to be falsy.', function() {
-            expect(unikong.isEllipsis('・・・')).toBe(false);
-        });
-
+        equal.call(this, unikong.isEllipsis, true, '…');
+        equal.call(this, unikong.isEllipsis, false, '・・・');
     });
 
     describe('isNotPermittedStart', function() {
-
-        it('to be truthy.', function() {
-            expect(unikong.isNotPermittedStart('？')).toBe(true);
-        });
-
-        it('to be falsy.', function() {
-            expect(unikong.isNotPermittedStart('（')).toBe(false);
-        });
-
+        equal.call(this, unikong.isNotPermittedStart, true, '？');
+        equal.call(this, unikong.isNotPermittedStart, false, '（');
     });
 
     describe('isNotPermittedEnd', function() {
-
-        it('to be truthy.', function() {
-            expect(unikong.isNotPermittedEnd('（')).toBe(true);
-        });
-
-        it('to be falsy.', function() {
-            expect(unikong.isNotPermittedEnd('！')).toBe(false);
-        });
-
+        equal.call(this, unikong.isNotPermittedEnd, true, '（');
+        equal.call(this, unikong.isNotPermittedEnd, false, '！');
     });
 
     describe('isSurrogatePair', function() {
-
-        it('to be truthy.', function() {
-            expect(unikong.isSurrogatePair('𡵅')).toBe(true);
-            expect(unikong.isSurrogatePair('𡉴𡧃')).toBe(true);
-        });
-
-        it('to be falsy.', function() {
-            expect(unikong.isSurrogatePair('川')).toBe(false);
-            expect(unikong.isSurrogatePair('龠𡼞')).toBe(false);
-        });
-
+        equal.call(this, unikong.isSurrogatePair, true, '𡵅');
+        equal.call(this, unikong.isSurrogatePair, true, '𡉴𡧃');
+        equal.call(this, unikong.isSurrogatePair, false, '川');
+        equal.call(this, unikong.isSurrogatePair, false, '龠𡼞');
     });
 
 
     describe('isUnicode6Emoji', function() {
-
-        it('to be truthy.', function() {
-            expect(unikong.isUnicode6Emoji('\uD83D\uDE01')).toBe(true);
-            expect(unikong.isUnicode6Emoji('\uD83D\uDEC0')).toBe(true);
-            expect(unikong.isUnicode6Emoji('\uD83C\uDDEF')).toBe(true);
-            expect(unikong.isUnicode6Emoji('\u2702')).toBe(true);
-        });
-
-        it('to be falsy.', function() {
-            expect(unikong.isUnicode6Emoji('＠')).toBe(false);
-            expect(unikong.isUnicode6Emoji('☭')).toBe(false);
-        });
+        equal.call(this, unikong.isUnicode6Emoji, true, '\uD83D\uDE01');
+        equal.call(this, unikong.isUnicode6Emoji, true, '\uD83D\uDEC0');
+        equal.call(this, unikong.isUnicode6Emoji, true, '\uD83C\uDDEF');
+        equal.call(this, unikong.isUnicode6Emoji, true, '\u2702');
+        equal.call(this, unikong.isUnicode6Emoji, false, '＠');
+        equal.call(this, unikong.isUnicode6Emoji, false, '☭');
     });
 
     describe('hasAlpha', function() {
-
-        it('to be truthy.', function() {
-            expect(unikong.hasAlpha('1A')).toBe(true);
-            expect(unikong.hasAlpha('ＡＢＣＺ')).toBe(true);
-            expect(unikong.hasAlpha('1A')).toBe(true);
-        });
-
-        it('to be falsy.', function() {
-            expect(unikong.hasAlpha('あいう')).toBe(false);
-            expect(unikong.hasAlpha('ワヲン')).toBe(false);
-        });
-
+        equal.call(this, unikong.hasAlpha, true, '1A');
+        equal.call(this, unikong.hasAlpha, true, 'ＡＢＣＺ');
+        equal.call(this, unikong.hasAlpha, true, '1A');
+        equal.call(this, unikong.hasAlpha, false, 'あいう');
+        equal.call(this, unikong.hasAlpha, false, 'ワヲン');
     });
 
     describe('hasNumeric', function() {
-
-        it('to be truthy.', function() {
-            expect(unikong.hasNumeric('012345')).toBe(true);
-            expect(unikong.hasNumeric('０１２３４５')).toBe(true);
-            expect(unikong.hasNumeric('1A')).toBe(true);
-        });
-
-        it('to be falsy.', function() {
-            expect(unikong.hasNumeric('あ')).toBe(false);
-            expect(unikong.hasNumeric('-^_<>')).toBe(false);    });
-
+        equal.call(this, unikong.hasNumeric, true, '012345');
+        equal.call(this, unikong.hasNumeric, true, '０１２３４５');
+        equal.call(this, unikong.hasNumeric, true, '1A');
+        equal.call(this, unikong.hasNumeric, false, 'あ');
+        equal.call(this, unikong.hasNumeric, false, '-^_<>');
     });
 
     describe('hasAlphaNumeric', function() {
-
-        it('to be truthy.', function() {
-            expect(unikong.hasAlphaNumeric('０あ')).toBe(true);
-            expect(unikong.hasAlphaNumeric('1a\nA_')).toBe(true);
-        });
-
-        it('to be falsy.', function() {
-            expect(unikong.hasAlphaNumeric('あ＿')).toBe(false);
-        });
-
+        equal.call(this, unikong.hasAlphaNumeric, true, '０あ');
+        equal.call(this, unikong.hasAlphaNumeric, true, '1a\nA_');
+        equal.call(this, unikong.hasAlphaNumeric, false, 'あ＿');
     });
 
     describe('hasAscii', function() {
-
-        it('to be truthy.', function() {
-            expect(unikong.hasAscii('あ01Aん')).toBe(true);
-            expect(unikong.hasAscii('南無阿弥陀仏_')).toBe(true);
-            expect(unikong.hasAscii('1A!?-)_')).toBe(true);
-            expect(unikong.hasAscii('０１２_４５Ｚ')).toBe(true);
-        });
-
-        it('to be falsy.', function() {
-            expect(unikong.hasAscii('０あ')).toBe(false);
-            expect(unikong.hasAscii('０１２＿４５Ｚ')).toBe(false);
-        });
-
+        equal.call(this, unikong.hasAscii, true, 'あ01Aん');
+        equal.call(this, unikong.hasAscii, true, '南無阿弥陀仏_');
+        equal.call(this, unikong.hasAscii, true, '1A!?-)_');
+        equal.call(this, unikong.hasAscii, true, '０１２_４５Ｚ');
+        equal.call(this, unikong.hasAscii, false, '０あ');
+        equal.call(this, unikong.hasAscii, false, '０１２＿４５Ｚ');
     });
 
     describe('hasHiragana', function() {
-
-        it('to be truthy.', function() {
-            expect(unikong.hasHiragana('いろはアウオ')).toBe(true);
-            expect(unikong.hasHiragana('あわをんカキワ')).toBe(true);
-        });
-
-        it('to be falsy.', function() {
-            expect(unikong.hasHiragana('1A_-?!')).toBe(false);
-            expect(unikong.hasHiragana('アヲ')).toBe(false);
-        });
-
+        equal.call(this, unikong.hasHiragana, true, 'いろはアウオ');
+        equal.call(this, unikong.hasHiragana, true, 'あわをんカキワ');
+        equal.call(this, unikong.hasHiragana, false, '1A_-?!');
+        equal.call(this, unikong.hasHiragana, false, 'アヲ');
     });
 
     describe('hasKatakana', function() {
-
-        it('to be truthy.', function() {
-            expect(unikong.hasKatakana('アあヲを')).toBe(true);
-            expect(unikong.hasKatakana('かガｶﾞ')).toBe(true);
-        });
-
-        it('to be falsy.', function() {
-            expect(unikong.hasKatakana('0A')).toBe(false);
-            expect(unikong.hasKatakana('ﾜｦﾝ')).toBe(false);
-            expect(unikong.hasKatakana('あを')).toBe(false);
-        });
-
+        equal.call(this, unikong.hasKatakana, true, 'アあヲを');
+        equal.call(this, unikong.hasKatakana, true, 'かガｶﾞ');
+        equal.call(this, unikong.hasKatakana, false, '0A');
+        equal.call(this, unikong.hasKatakana, false, 'ﾜｦﾝ');
+        equal.call(this, unikong.hasKatakana, false, 'あを');
     });
 
     describe('hasHankana', function() {
-
-        it('to be truthy.', function() {
-            expect(unikong.hasHankana('ｱあｦﾝ')).toBe(true);
-            expect(unikong.hasHankana('ｻﾞｼﾞﾂﾞ')).toBe(true);
-            expect(unikong.hasHankana('ｬｭｮabcdez')).toBe(true);
-        });
-
-        it('to be falsy.', function() {
-            expect(unikong.hasHankana('09')).toBe(false);
-            expect(unikong.hasHankana('AZ')).toBe(false);
-            expect(unikong.hasHankana('あを')).toBe(false);
-            expect(unikong.hasHankana('アヲ')).toBe(false);
-            expect(unikong.hasHankana('ザガポド')).toBe(false);
-        });
-
+        equal.call(this, unikong.hasHankana, true, 'ｱあｦﾝ');
+        equal.call(this, unikong.hasHankana, true, 'ｻﾞｼﾞﾂﾞ');
+        equal.call(this, unikong.hasHankana, true, 'ｬｭｮabcdez');
+        equal.call(this, unikong.hasHankana, false, '09');
+        equal.call(this, unikong.hasHankana, false, 'AZ');
+        equal.call(this, unikong.hasHankana, false, 'あを');
+        equal.call(this, unikong.hasHankana, false, 'アヲ');
+        equal.call(this, unikong.hasHankana, false, 'ザガポド');
     });
 
     describe('hasHalfWidth', function() {
-
-        it('to be truthy.', function() {
-            expect(unikong.hasHalfWidth('ｱあ')).toBe(true);
-            expect(unikong.hasHalfWidth('ｻﾞｼﾞﾂﾞゼゾ')).toBe(true);
-            expect(unikong.hasHalfWidth('南無阿弥陀仏12345')).toBe(true);
-        });
-
-        it('to be falsy.', function() {
-            expect(unikong.hasHalfWidth('あを')).toBe(false);
-            expect(unikong.hasHalfWidth('Ура')).toBe(false);
-            expect(unikong.hasHalfWidth('ー＠')).toBe(false);
-        });
-
+        equal.call(this, unikong.hasHalfWidth, true, 'ｱあ');
+        equal.call(this, unikong.hasHalfWidth, true, 'ｻﾞｼﾞﾂﾞゼゾ');
+        equal.call(this, unikong.hasHalfWidth, true, '南無阿弥陀仏12345');
+        equal.call(this, unikong.hasHalfWidth, false, 'あを');
+        equal.call(this, unikong.hasHalfWidth, false, 'Ура');
+        equal.call(this, unikong.hasHalfWidth, false, 'ー＠');
     });
 
     describe('hasFullWidth', function() {
-
-        it('to be truthy.', function() {
-            expect(unikong.hasFullWidth('Aあ')).toBe(true);
-            expect(unikong.hasFullWidth('Ａア')).toBe(true);
-            expect(unikong.hasFullWidth('南無阿弥陀仏123')).toBe(true);
-        });
-
-        it('to be falsy.', function() {
-            expect(unikong.hasFullWidth('ｱ')).toBe(false);
-            expect(unikong.hasFullWidth('ｻﾞｼﾞﾂﾞ')).toBe(false);
-            expect(unikong.hasFullWidth('ｬｭｮ_-[')).toBe(false);
-            expect(unikong.hasFullWidth('A09Z@')).toBe(false);
-        });
-
+        equal.call(this, unikong.hasFullWidth, true, 'Aあ');
+        equal.call(this, unikong.hasFullWidth, true, 'Ａア');
+        equal.call(this, unikong.hasFullWidth, true, '南無阿弥陀仏123');
+        equal.call(this, unikong.hasFullWidth, false, 'ｱ');
+        equal.call(this, unikong.hasFullWidth, false, 'ｻﾞｼﾞﾂﾞ');
+        equal.call(this, unikong.hasFullWidth, false, 'ｬｭｮ_-[');
+        equal.call(this, unikong.hasFullWidth, false, 'A09Z@');
     });
 
     describe('hasLineBreak', function() {
-
-        it('to be truthy.', function() {
-            expect(unikong.hasLineBreak('\n')).toBe(true);
-            expect(unikong.hasLineBreak('\r\n')).toBe(true);
-            expect(unikong.hasLineBreak('A\nB')).toBe(true);
-        });
-
-        it('to be falsy.', function() {
-            expect(unikong.hasLineBreak('\t')).toBe(false);
-        });
-
+        equal.call(this, unikong.hasLineBreak, true, '\n');
+        equal.call(this, unikong.hasLineBreak, true, '\r\n');
+        equal.call(this, unikong.hasLineBreak, true, 'A\nB');
+        equal.call(this, unikong.hasLineBreak, false, '\t');
     });
 
     describe('hasCyrillic', function() {
-
-        it('to be truthy.', function() {
-            expect(unikong.hasCyrillic('БДБ')).toBe(true);
-            expect(unikong.hasCyrillic('Урааааааа')).toBe(true);
-            expect(unikong.hasCyrillic('УY')).toBe(true);
-        });
-
-        it('to be falsy.', function() {
-            expect(unikong.hasCyrillic('あを')).toBe(false);
-            expect(unikong.hasCyrillic('Ypa')).toBe(false);
-        });
-
+        equal.call(this, unikong.hasCyrillic, true, 'БДБ');
+        equal.call(this, unikong.hasCyrillic, true, 'Урааааааа');
+        equal.call(this, unikong.hasCyrillic, true, 'УY');
+        equal.call(this, unikong.hasCyrillic, false, 'あを');
+        equal.call(this, unikong.hasCyrillic, false, 'Ypa');
     });
 
     describe('hasBlank', function() {
-
-        it('to be truthy.', function() {
-            expect(unikong.hasBlank('1\t0')).toBe(true);
-            expect(unikong.hasBlank('1　9')).toBe(true);
-            expect(unikong.hasBlank('2\n5')).toBe(true);
-            expect(unikong.hasBlank('1 a')).toBe(true);
-        });
-
-        it('to be falsy.', function() {
-            expect(unikong.hasBlank('4_')).toBe(false);
-            expect(unikong.hasBlank('1020304050')).toBe(false);
-        });
-
+        equal.call(this, unikong.hasBlank, true, '1\t0');
+        equal.call(this, unikong.hasBlank, true, '1　9');
+        equal.call(this, unikong.hasBlank, true, '2\n5');
+        equal.call(this, unikong.hasBlank, true, '1 a');
+        equal.call(this, unikong.hasBlank, false, '4_');
+        equal.call(this, unikong.hasBlank, false, '1020304050');
     });
 
     describe('hasContralCode', function() {
-
-        it('to be truthy.', function() {
-            expect(unikong.hasContralCode('\u0000〜\u007F')).toBe(true);
-            expect(unikong.hasContralCode('\u0005〜')).toBe(true);
-        });
-
-        it('to be falsy.', function() {
-            expect(unikong.hasContralCode('_-〜')).toBe(false);
-            expect(unikong.hasContralCode(' 〜')).toBe(false);
-        });
-
+        equal.call(this, unikong.hasContralCode, true, '\u0000〜\u007F');
+        equal.call(this, unikong.hasContralCode, true, '\u0005〜');
+        equal.call(this, unikong.hasContralCode, false, '_-〜');
+        equal.call(this, unikong.hasContralCode, false, ' 〜');
     });
 
     describe('hasPageBreak', function() {
-
-        it('to be truthy.', function() {
-            expect(unikong.hasPageBreak('あ\fう')).toBe(true);
-        });
-
-        it('to be falsy.', function() {
-            expect(unikong.hasPageBreak('あ\rう')).toBe(false);
-            expect(unikong.hasPageBreak('あ\tう')).toBe(false);
-        });
-
+        equal.call(this, unikong.hasPageBreak, true, 'あ\fう');
+        equal.call(this, unikong.hasPageBreak, false, 'あ\rう');
+        equal.call(this, unikong.hasPageBreak, false, 'あ\tう');
     });
 
     describe('hasOpeningBracket', function() {
-
-        it('to be truthy.', function() {
-            expect(unikong.hasOpeningBracket('「は')).toBe(true);
-        });
-
-        it('to be falsy.', function() {
-            expect(unikong.hasOpeningBracket('は」')).toBe(false);
-        });
-
+        equal.call(this, unikong.hasOpeningBracket, true, '「は');
+        equal.call(this, unikong.hasOpeningBracket, false, 'は」');
     });
 
     describe('hasClosingBracket', function() {
-
-        it('to be truthy.', function() {
-            expect(unikong.hasClosingBracket('ん]')).toBe(true);
-        });
-
-        it('to be falsy.', function() {
-            expect(unikong.hasClosingBracket('[ん')).toBe(false);
-        });
-
+        equal.call(this, unikong.hasClosingBracket, true, 'ん]');
+        equal.call(this, unikong.hasClosingBracket, false, '[ん');
     });
 
     describe('hasHyphen', function() {
-
-        it('to be truthy.', function() {
-            expect(unikong.hasHyphen('-＝')).toBe(true);
-            expect(unikong.hasHyphen('〜＝')).toBe(true);
-        });
-
-        it('to be falsy.', function() {
-            expect(unikong.hasHyphen('＝＝')).toBe(false);
-        });
-
+        equal.call(this, unikong.hasHyphen, true, '-＝');
+        equal.call(this, unikong.hasHyphen, true, '〜＝');
+        equal.call(this, unikong.hasHyphen, false, '＝＝');
     });
 
     describe('hasPunctuation', function() {
-
-        it('to be truthy.', function() {
-            expect(unikong.hasPunctuation('＋、')).toBe(true);
-            expect(unikong.hasPunctuation('＋。')).toBe(true);
-        });
-
-        it('to be falsy.', function() {
-            expect(unikong.hasPunctuation('＋＊')).toBe(false);
-        });
-
+        equal.call(this, unikong.hasPunctuation, true, '＋、');
+        equal.call(this, unikong.hasPunctuation, true, '＋。');
+        equal.call(this, unikong.hasPunctuation, false, '＋＊');
     });
 
     describe('hasEllipsis', function() {
-
-        it('to be truthy.', function() {
-            expect(unikong.hasEllipsis('お…')).toBe(true);
-        });
-
-        it('to be falsy.', function() {
-            expect(unikong.hasEllipsis('お・・・')).toBe(false);
-        });
-
+        equal.call(this, unikong.hasEllipsis, true, 'お…');
+        equal.call(this, unikong.hasEllipsis, false, 'お・・・');
     });
 
     describe('hasNotPermittedStart', function() {
-
-        it('to be truthy.', function() {
-            expect(unikong.hasNotPermittedStart('あ！')).toBe(true);
-        });
-
-        it('to be falsy.', function() {
-            expect(unikong.hasNotPermittedStart('あ（')).toBe(false);
-        });
-
+        equal.call(this, unikong.hasNotPermittedStart, true, 'あ！');
+        equal.call(this, unikong.hasNotPermittedStart, false, 'あ（');
     });
 
     describe('hasNotPermittedEnd', function() {
-
-        it('to be truthy.', function() {
-            expect(unikong.hasNotPermittedEnd('＠（')).toBe(true);
-        });
-
-        it('to be falsy.', function() {
-            expect(unikong.hasNotPermittedEnd('＠？')).toBe(false);
-        });
-
+        equal.call(this, unikong.hasNotPermittedEnd, true, '＠（');
+        equal.call(this, unikong.hasNotPermittedEnd, false, '＠？');
     });
 
     describe('hasSurrogatePair', function() {
-
-        it('to be truthy.', function() {
-            expect(unikong.hasSurrogatePair('𡵅')).toBe(true);
-            expect(unikong.hasSurrogatePair('𡉴𡧃')).toBe(true);
-            expect(unikong.hasSurrogatePair('龠𡼞')).toBe(true);
-        });
-
-        it('to be falsy.', function() {
-            expect(unikong.hasSurrogatePair('龠')).toBe(false);
-            expect(unikong.hasSurrogatePair('南無阿弥陀仏')).toBe(false);
-        });
-
+        equal.call(this, unikong.hasSurrogatePair, true, '𡵅');
+        equal.call(this, unikong.hasSurrogatePair, true, '𡉴𡧃');
+        equal.call(this, unikong.hasSurrogatePair, true, '龠𡼞');
+        equal.call(this, unikong.hasSurrogatePair, false, '龠');
+        equal.call(this, unikong.hasSurrogatePair, false, '南無阿弥陀仏');
     });
 
     describe('hasUnicode6Emoji', function() {
-
-        it('to be truthy.', function() {
-            expect(unikong.hasUnicode6Emoji('\uD83D\uDE01')).toBe(true);
-            expect(unikong.hasUnicode6Emoji('\uD83D\uDEC0')).toBe(true);
-            expect(unikong.hasUnicode6Emoji('\uD83C\uDDEF')).toBe(true);
-            expect(unikong.hasUnicode6Emoji('\u2702')).toBe(true);
-        });
-
-        it('to be falsy.', function() {
-            expect(unikong.hasUnicode6Emoji('＠')).toBe(false);
-            expect(unikong.hasUnicode6Emoji('☭')).toBe(false);
-        });
+        equal.call(this, unikong.hasUnicode6Emoji, true, '\uD83D\uDE01');
+        equal.call(this, unikong.hasUnicode6Emoji, true, '\uD83D\uDEC0');
+        equal.call(this, unikong.hasUnicode6Emoji, true, '\uD83C\uDDEF');
+        equal.call(this, unikong.hasUnicode6Emoji, true, '\u2702');
+        equal.call(this, unikong.hasUnicode6Emoji, false, '＠');
+        equal.call(this, unikong.hasUnicode6Emoji, false, '☭');
     });
 
 })();

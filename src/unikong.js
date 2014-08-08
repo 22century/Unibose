@@ -14,9 +14,9 @@
  *
  * @auther 22century
  * @license MIT license.
- * @version 0.3
+ * @version 0.4
  */
-(function(window){
+(function (window) {
 
     var _objects = {
 
@@ -41,7 +41,7 @@
          * @param prop
          * @param descriptor
          */
-        extend: function(obj, prop, descriptor) {
+        extend: function (obj, prop, descriptor) {
             if (this._defineProperty === true) {
                 Object.defineProperty(obj, prop, {
                     enumerable: false,
@@ -121,9 +121,423 @@
     };
 
 
-    var Unikong = function(){};
+    var Unikong = function () {};
 
     Unikong.prototype = {
+
+        /**
+         * 英字（全角半角混同）
+         * @param {string} str
+         * @returns {boolean}
+         */
+        isAlpha: function (str) {
+            return _matches.perfect(REGEXPS.ALPHA, str);
+        },
+
+        /**
+         * 数字（全角半角混同）
+         * @param {string} str
+         * @returns {boolean}
+         */
+        isNumeric: function (str) {
+            return _matches.perfect(REGEXPS.NUMERIC, str);
+        },
+
+        /**
+         * 英数字（全角半角混同）
+         * @param {string} str
+         * @returns {boolean}
+         */
+        isAlphaNumeric: function (str) {
+            return _matches.perfect(REGEXPS.ALPHANUMERIC, str);
+        },
+
+        /**
+         * ASCIIコード
+         * @param {string} str
+         * @returns {boolean}
+         */
+        isAscii: function (str) {
+            return _matches.perfect(REGEXPS.ASCII, str);
+        },
+
+        /**
+         * ひらがな
+         * @param {string} str
+         * @returns {boolean}
+         */
+        isHiragana: function (str) {
+            return _matches.perfect(REGEXPS.HIRAGANA, str);
+        },
+
+        /**
+         * カタカナ
+         * @param {string} str
+         * @returns {boolean}
+         */
+        isKatakana: function (str) {
+            return _matches.perfect(REGEXPS.KATANAKA, str);
+        },
+
+        /**
+         * 半角カナ
+         * @param {string} str
+         * @returns {boolean}
+         */
+        isHankana: function (str) {
+            return _matches.perfect(REGEXPS.HANKANA, str);
+        },
+
+        /**
+         * 半角
+         * @param {string} str
+         * @returns {boolean}
+         */
+        isHalfWidth: function (str) {
+            return _matches.perfect(REGEXPS.HALFWIDTH, str);
+        },
+
+        /**
+         * 全角
+         * @param {string} str
+         * @returns {boolean}
+         */
+        isFullWidth: function (str) {
+            return _matches.perfect(REGEXPS.FULLWIDTH, str);
+        },
+
+        /**
+         * キリル文字
+         * @param {string} str
+         * @returns {boolean}
+         */
+        isCyrillic: function (str) {
+            return _matches.perfect(REGEXPS.CYRILLIC, str);
+        },
+
+        /**
+         * 制御コード
+         * @param {string} str
+         * @returns {boolean}
+         */
+        isContralCode: function (str) {
+            return _matches.perfect(REGEXPS.CONTROLCODE, str);
+        },
+
+        /**
+         * 改行コード
+         * @param {string} str
+         * @returns {boolean}
+         */
+        isLineBreak: function (str) {
+            return _matches.perfect(REGEXPS.LINEBREAK, str);
+        },
+
+        /**
+         * 改ページコード
+         * @param {string} str
+         * @returns {boolean}
+         */
+        isPageBreak: function (str) {
+            return _matches.perfect(REGEXPS.PAGEBREAK, str);
+        },
+
+        /**
+         * 空白文字
+         * @param {string} str
+         * @returns {boolean}
+         */
+        isBlank: function (str) {
+            return str.length === 0 || _matches.perfect(REGEXPS.BLANK, str);
+        },
+
+        /**
+         * 始め括弧
+         * @param {string} str
+         * @returns {boolean}
+         */
+        isOpeningBracket: function (str) {
+            return _matches.perfect(REGEXPS.OPENINGBRACKET, str);
+        },
+
+        /**
+         * 閉じ括弧
+         * @param {string} str
+         * @returns {boolean}
+         */
+        isClosingBracket: function (str) {
+            return _matches.perfect(REGEXPS.CLOSINGBRACKET, str);
+        },
+
+        /**
+         * 長音符
+         * @param {string} str
+         * @returns {boolean}
+         */
+        isHyphen: function (str) {
+            return _matches.perfect(REGEXPS.HYPHEN, str);
+        },
+
+        /**
+         * 句読点
+         * @param {string} str
+         * @returns {boolean}
+         */
+        isPunctuation: function (str) {
+            return _matches.perfect(REGEXPS.PUNCTUATION, str);
+        },
+
+        /**
+         * リーダー、省略記号
+         * @param {string} str
+         * @returns {boolean}
+         */
+        isEllipsis: function (str) {
+            return _matches.perfect(REGEXPS.ELLIPSIS, str);
+        },
+
+        /**
+         * 行頭禁則文字
+         * @param {string} str
+         * @returns {boolean}
+         */
+        isNotPermittedStart : function (str) {
+            return _matches.perfect(REGEXPS.NOTPERMITTEDSTART, str);
+        },
+
+        /**
+         * 行末禁則文字
+         * @param {string} str
+         * @returns {boolean}
+         */
+        isNotPermittedEnd: function (str) {
+            return _matches.perfect(REGEXPS.NOTPERMITTEDEND, str);
+        },
+
+        /**
+         * サロゲートペア
+         * @param {string} str
+         * @returns {boolean}
+         */
+        isSurrogatePair: function (str) {
+            return _matches.perfect(REGEXPS.SURROGATEPAIR, str);
+        },
+
+        /**
+         * Unicode6絵文字コード
+         * @param {string} str
+         * @returns {boolean}
+         */
+        isUnicode6Emoji: function (str) {
+            return _matches.perfect(REGEXPS.UNICODE6EMOJI, str);
+        },
+
+        /**
+         * 英字（全角半角混同）
+         * @param {string} str
+         * @returns {boolean}
+         */
+        hasAlpha: function (str) {
+            return _matches.partial(REGEXPS.ALPHA, str);
+        },
+
+        /**
+         * 数字（全角半角混同）
+         * @param {string} str
+         * @returns {boolean}
+         */
+        hasNumeric: function (str) {
+            return _matches.partial(REGEXPS.NUMERIC, str);
+        },
+
+        /**
+         * 英数字（全角半角混同）
+         * @param {string} str
+         * @returns {boolean}
+         */
+        hasAlphaNumeric: function (str) {
+            return _matches.partial(REGEXPS.ALPHANUMERIC, str);
+        },
+
+        /**
+         * ASCIIコード
+         * @param {string} str
+         * @returns {boolean}
+         */
+        hasAscii: function (str) {
+            return _matches.partial(REGEXPS.ASCII, str);
+        },
+
+        /**
+         * ひらがな
+         * @param {string} str
+         * @returns {boolean}
+         */
+        hasHiragana: function (str) {
+            return _matches.partial(REGEXPS.HIRAGANA, str);
+        },
+
+        /**
+         * カタカナ
+         * @param {string} str
+         * @returns {boolean}
+         */
+        hasKatakana: function (str) {
+            return _matches.partial(REGEXPS.KATANAKA, str);
+        },
+
+        /**
+         * 半角カナ
+         * @param {string} str
+         * @returns {boolean}
+         */
+        hasHankana: function (str) {
+            return _matches.partial(REGEXPS.HANKANA, str);
+        },
+
+        /**
+         * 半角
+         * @param {string} str
+         * @returns {boolean}
+         */
+        hasHalfWidth: function (str) {
+            return _matches.partial(REGEXPS.HALFWIDTH, str);
+        },
+
+        /**
+         * 全角
+         * @param {string} str
+         * @returns {boolean}
+         */
+        hasFullWidth: function (str) {
+            return _matches.partial(REGEXPS.FULLWIDTH, str);
+        },
+
+        /**
+         * キリル文字
+         * @param {string} str
+         * @returns {boolean}
+         */
+        hasCyrillic: function (str) {
+            return _matches.partial(REGEXPS.CYRILLIC, str);
+        },
+
+        /**
+         * 制御コード
+         * @param {string} str
+         * @returns {boolean}
+         */
+        hasContralCode: function (str) {
+            return _matches.partial(REGEXPS.CONTROLCODE, str);
+        },
+
+        /**
+         * 改行コード
+         * @param {string} str
+         * @returns {boolean}
+         */
+        hasLineBreak: function (str) {
+            return _matches.partial(REGEXPS.LINEBREAK, str);
+        },
+
+        /**
+         * 改ページコード
+         * @param {string} str
+         * @returns {boolean}
+         */
+        hasPageBreak: function (str) {
+            return _matches.partial(REGEXPS.PAGEBREAK, str);
+        },
+
+        /**
+         * 空白文字
+         * @param {string} str
+         * @returns {boolean}
+         */
+        hasBlank: function (str) {
+            return str.length === 0 || _matches.partial(REGEXPS.BLANK, str);
+        },
+
+        /**
+         * 始め括弧
+         * @param {string} str
+         * @returns {boolean}
+         */
+        hasOpeningBracket: function (str) {
+            return _matches.partial(REGEXPS.OPENINGBRACKET, str);
+        },
+
+        /**
+         * 閉じ括弧
+         * @param {string} str
+         * @returns {boolean}
+         */
+        hasClosingBracket: function (str) {
+            return _matches.partial(REGEXPS.CLOSINGBRACKET, str);
+        },
+
+        /**
+         * 長音符
+         * @param {string} str
+         * @returns {boolean}
+         */
+        hasHyphen: function (str) {
+            return _matches.partial(REGEXPS.HYPHEN, str);
+        },
+
+        /**
+         * 句読点
+         * @param {string} str
+         * @returns {boolean}
+         */
+        hasPunctuation: function (str) {
+            return _matches.partial(REGEXPS.PUNCTUATION, str);
+        },
+
+        /**
+         * リーダー、省略記号
+         * @param {string} str
+         * @returns {boolean}
+         */
+        hasEllipsis: function (str) {
+            return _matches.partial(REGEXPS.ELLIPSIS, str);
+        },
+
+        /**
+         * 行頭禁則文字
+         * @param {string} str
+         * @returns {boolean}
+         */
+        hasNotPermittedStart : function (str) {
+            return _matches.partial(REGEXPS.NOTPERMITTEDSTART, str);
+        },
+
+        /**
+         * 行末禁則文字
+         * @param {string} str
+         * @returns {boolean}
+         */
+        hasNotPermittedEnd: function (str) {
+            return _matches.partial(REGEXPS.NOTPERMITTEDEND, str);
+        },
+
+        /**
+         * サロゲートペア
+         * @param {string} str
+         * @returns {boolean}
+         */
+        hasSurrogatePair: function (str) {
+            return _matches.partial(REGEXPS.SURROGATEPAIR, str);
+        },
+
+        /**
+         * Unicode6絵文字コード
+         * @param {string} str
+         * @returns {boolean}
+         */
+        hasUnicode6Emoji: function (str) {
+            return _matches.partial(REGEXPS.UNICODE6EMOJI, str);
+        },
 
         /**
          * サロゲートペアを考慮したカウント
@@ -146,7 +560,7 @@
          * @param {string} str
          * @returns {string}
          */
-        toUnicodeLiteral: function(str){
+        toUnicodeLiteral: function (str) {
             var chars = [];
             for (var i = 0, l = str.length; i < l; i++) {
                 chars[i] = '\\u' + ('0000' + str.charCodeAt(i).toString(16)).toUpperCase().slice(-4);
@@ -160,7 +574,7 @@
          * @param {string} breakCode... 置換する改行コード（省略可）
          * @returns {string}
          */
-        normalizeLinebreak: function(str, breakCode){
+        normalizeLinebreak: function (str, breakCode) {
             return str.split(REGEXPS.LINEBREAK.PARTIAL).join(
                 (arguments.length <= 1) ? '\n' : breakCode
             );
@@ -172,7 +586,7 @@
          * @param {string} replaceStr... 置換文字（省略可）
          * @returns {string}
          */
-        stripSurrogatePair: function(str, replaceStr){
+        stripSurrogatePair: function (str, replaceStr) {
             return str.replace(REGEXPS.SURROGATEPAIR.PARTIAL,
                 (arguments.length <= 1) ? '' : replaceStr
             );
@@ -184,424 +598,71 @@
          * @param {string} replaceStr... 置換文字（省略可）
          * @returns {string}
          */
-        stripUnicode6Emoji: function(str, replaceStr){
+        stripUnicode6Emoji: function (str, replaceStr) {
             return str.replace(REGEXPS.UNICODE6EMOJI.PARTIAL,
                 (arguments.length <= 1) ? '' : replaceStr
             );
         },
 
         /**
-         * 英字（全角半角混同）
+         * trim
          * @param {string} str
-         * @returns {boolean}
          */
-        isAlpha: function(str){
-            return _matches.perfect(REGEXPS.ALPHA, str);
+        trim: function (str) {
+            return (typeof String.prototype.trim === 'function')
+                ? String.prototype.trim.call(str)
+                : str.replace(/^\s+|\s+$/g,'');
         },
 
         /**
-         * 数字（全角半角混同）
+         * trim
          * @param {string} str
-         * @returns {boolean}
          */
-        isNumeric: function(str){
-            return _matches.perfect(REGEXPS.NUMERIC, str);
+        trimLeft: function (str) {
+            return (typeof String.prototype.trimLeft === 'function')
+                ? String.prototype.trimLeft.call(str)
+                : str.replace(/^\s+(.*)$/g,'$1');
         },
 
         /**
-         * 英数字（全角半角混同）
+         * trim
          * @param {string} str
-         * @returns {boolean}
          */
-        isAlphaNumeric: function(str){
-            return _matches.perfect(REGEXPS.ALPHANUMERIC, str);
+        trimRight: function (str) {
+            return (typeof String.prototype.trimRight === 'function')
+                ? String.prototype.trimRight.call(str)
+                : str.replace(/^(.*?)|\s+$/g,'$1');
         },
 
         /**
-         * ASCIIコード
+         * 一文字ずつの配列を作成
          * @param {string} str
-         * @returns {boolean}
+         * @returns {Array}
          */
-        isAscii: function(str){
-            return _matches.perfect(REGEXPS.ASCII, str);
-        },
+        charArray: function (str) {
 
-        /**
-         * ひらがな
-         * @param {string} str
-         * @returns {boolean}
-         */
-        isHiragana: function(str){
-            return _matches.perfect(REGEXPS.HIRAGANA, str);
-        },
+            var chars = [],
+                cha   = '',
+                high  = /^[\uD800-\uDBFF]$/,
+                low   = /^[\uDC00-\uDFFF]$/;
 
-        /**
-         * カタカナ
-         * @param {string} str
-         * @returns {boolean}
-         */
-        isKatakana: function(str){
-            return _matches.perfect(REGEXPS.KATANAKA, str);
-        },
+            if (!this.hasSurrogatePair(str)) {
+                chars = Array.prototype.slice.call(str);
+            } else {
+                for (var i = 0, l = str.length; i < l; i++) {
+                    cha = str[i];
+                    if (high.test(cha) && i < l - 1) {
+                        if (low.test(str[i + 1])) {
+                            chars[chars.length] = String.fromCharCode(str.charCodeAt(i), str.charCodeAt(i + 1));
+                            ++i;
+                        }
+                    } else {
+                        chars[chars.length] = cha;
+                    }
+                }
+            }
 
-        /**
-         * 半角カナ
-         * @param {string} str
-         * @returns {boolean}
-         */
-        isHankana: function(str){
-            return _matches.perfect(REGEXPS.HANKANA, str);
-        },
-
-        /**
-         * 半角
-         * @param {string} str
-         * @returns {boolean}
-         */
-        isHalfWidth: function(str){
-            return _matches.perfect(REGEXPS.HALFWIDTH, str);
-        },
-
-        /**
-         * 全角
-         * @param {string} str
-         * @returns {boolean}
-         */
-        isFullWidth: function(str){
-            return _matches.perfect(REGEXPS.FULLWIDTH, str);
-        },
-
-        /**
-         * キリル文字
-         * @param {string} str
-         * @returns {boolean}
-         */
-        isCyrillic: function(str){
-            return _matches.perfect(REGEXPS.CYRILLIC, str);
-        },
-
-        /**
-         * 制御コード
-         * @param {string} str
-         * @returns {boolean}
-         */
-        isContralCode: function(str){
-            return _matches.perfect(REGEXPS.CONTROLCODE, str);
-        },
-
-        /**
-         * 改行コード
-         * @param {string} str
-         * @returns {boolean}
-         */
-        isLineBreak: function(str){
-            return _matches.perfect(REGEXPS.LINEBREAK, str);
-        },
-
-        /**
-         * 改ページコード
-         * @param {string} str
-         * @returns {boolean}
-         */
-        isPageBreak: function(str){
-            return _matches.perfect(REGEXPS.PAGEBREAK, str);
-        },
-
-        /**
-         * 空白文字
-         * @param {string} str
-         * @returns {boolean}
-         */
-        isBlank: function(str){
-            return str.length === 0 || _matches.perfect(REGEXPS.BLANK, str);
-        },
-
-        /**
-         * 始め括弧
-         * @param {string} str
-         * @returns {boolean}
-         */
-        isOpeningBracket: function(str){
-            return _matches.perfect(REGEXPS.OPENINGBRACKET, str);
-        },
-
-        /**
-         * 閉じ括弧
-         * @param {string} str
-         * @returns {boolean}
-         */
-        isClosingBracket: function(str){
-            return _matches.perfect(REGEXPS.CLOSINGBRACKET, str);
-        },
-
-        /**
-         * 長音符
-         * @param {string} str
-         * @returns {boolean}
-         */
-        isHyphen: function(str){
-            return _matches.perfect(REGEXPS.HYPHEN, str);
-        },
-
-        /**
-         * 句読点
-         * @param {string} str
-         * @returns {boolean}
-         */
-        isPunctuation: function(str){
-            return _matches.perfect(REGEXPS.PUNCTUATION, str);
-        },
-
-        /**
-         * リーダー、省略記号
-         * @param {string} str
-         * @returns {boolean}
-         */
-        isEllipsis: function(str){
-            return _matches.perfect(REGEXPS.ELLIPSIS, str);
-        },
-
-        /**
-         * 行頭禁則文字
-         * @param {string} str
-         * @returns {boolean}
-         */
-        isNotPermittedStart : function(str){
-            return _matches.perfect(REGEXPS.NOTPERMITTEDSTART, str);
-        },
-
-        /**
-         * 行末禁則文字
-         * @param {string} str
-         * @returns {boolean}
-         */
-        isNotPermittedEnd: function(str){
-            return _matches.perfect(REGEXPS.NOTPERMITTEDEND, str);
-        },
-
-        /**
-         * サロゲートペア
-         * @param {string} str
-         * @returns {boolean}
-         */
-        isSurrogatePair: function(str){
-            return _matches.perfect(REGEXPS.SURROGATEPAIR, str);
-        },
-
-        /**
-         * Unicode6絵文字コード
-         * @param {string} str
-         * @returns {boolean}
-         */
-        isUnicode6Emoji: function(str){
-            return _matches.perfect(REGEXPS.UNICODE6EMOJI, str);
-        },
-
-        /**
-         * 英字（全角半角混同）
-         * @param {string} str
-         * @returns {boolean}
-         */
-        hasAlpha: function(str){
-            return _matches.partial(REGEXPS.ALPHA, str);
-        },
-
-        /**
-         * 数字（全角半角混同）
-         * @param {string} str
-         * @returns {boolean}
-         */
-        hasNumeric: function(str){
-            return _matches.partial(REGEXPS.NUMERIC, str);
-        },
-
-        /**
-         * 英数字（全角半角混同）
-         * @param {string} str
-         * @returns {boolean}
-         */
-        hasAlphaNumeric: function(str){
-            return _matches.partial(REGEXPS.ALPHANUMERIC, str);
-        },
-
-        /**
-         * ASCIIコード
-         * @param {string} str
-         * @returns {boolean}
-         */
-        hasAscii: function(str){
-            return _matches.partial(REGEXPS.ASCII, str);
-        },
-
-        /**
-         * ひらがな
-         * @param {string} str
-         * @returns {boolean}
-         */
-        hasHiragana: function(str){
-            return _matches.partial(REGEXPS.HIRAGANA, str);
-        },
-
-        /**
-         * カタカナ
-         * @param {string} str
-         * @returns {boolean}
-         */
-        hasKatakana: function(str){
-            return _matches.partial(REGEXPS.KATANAKA, str);
-        },
-
-        /**
-         * 半角カナ
-         * @param {string} str
-         * @returns {boolean}
-         */
-        hasHankana: function(str){
-            return _matches.partial(REGEXPS.HANKANA, str);
-        },
-
-        /**
-         * 半角
-         * @param {string} str
-         * @returns {boolean}
-         */
-        hasHalfWidth: function(str){
-            return _matches.partial(REGEXPS.HALFWIDTH, str);
-        },
-
-        /**
-         * 全角
-         * @param {string} str
-         * @returns {boolean}
-         */
-        hasFullWidth: function(str){
-            return _matches.partial(REGEXPS.FULLWIDTH, str);
-        },
-
-        /**
-         * キリル文字
-         * @param {string} str
-         * @returns {boolean}
-         */
-        hasCyrillic: function(str){
-            return _matches.partial(REGEXPS.CYRILLIC, str);
-        },
-
-        /**
-         * 制御コード
-         * @param {string} str
-         * @returns {boolean}
-         */
-        hasContralCode: function(str){
-            return _matches.partial(REGEXPS.CONTROLCODE, str);
-        },
-
-        /**
-         * 改行コード
-         * @param {string} str
-         * @returns {boolean}
-         */
-        hasLineBreak: function(str){
-            return _matches.partial(REGEXPS.LINEBREAK, str);
-        },
-
-        /**
-         * 改ページコード
-         * @param {string} str
-         * @returns {boolean}
-         */
-        hasPageBreak: function(str){
-            return _matches.partial(REGEXPS.PAGEBREAK, str);
-        },
-
-        /**
-         * 空白文字
-         * @param {string} str
-         * @returns {boolean}
-         */
-        hasBlank: function(str){
-            return str.length === 0 || _matches.partial(REGEXPS.BLANK, str);
-        },
-
-        /**
-         * 始め括弧
-         * @param {string} str
-         * @returns {boolean}
-         */
-        hasOpeningBracket: function(str){
-            return _matches.partial(REGEXPS.OPENINGBRACKET, str);
-        },
-
-        /**
-         * 閉じ括弧
-         * @param {string} str
-         * @returns {boolean}
-         */
-        hasClosingBracket: function(str){
-            return _matches.partial(REGEXPS.CLOSINGBRACKET, str);
-        },
-
-        /**
-         * 長音符
-         * @param {string} str
-         * @returns {boolean}
-         */
-        hasHyphen: function(str){
-            return _matches.partial(REGEXPS.HYPHEN, str);
-        },
-
-        /**
-         * 句読点
-         * @param {string} str
-         * @returns {boolean}
-         */
-        hasPunctuation: function(str){
-            return _matches.partial(REGEXPS.PUNCTUATION, str);
-        },
-
-        /**
-         * リーダー、省略記号
-         * @param {string} str
-         * @returns {boolean}
-         */
-        hasEllipsis: function(str){
-            return _matches.partial(REGEXPS.ELLIPSIS, str);
-        },
-
-        /**
-         * 行頭禁則文字
-         * @param {string} str
-         * @returns {boolean}
-         */
-        hasNotPermittedStart : function(str){
-            return _matches.partial(REGEXPS.NOTPERMITTEDSTART, str);
-        },
-
-        /**
-         * 行末禁則文字
-         * @param {string} str
-         * @returns {boolean}
-         */
-        hasNotPermittedEnd: function(str){
-            return _matches.partial(REGEXPS.NOTPERMITTEDEND, str);
-        },
-
-        /**
-         * サロゲートペア
-         * @param {string} str
-         * @returns {boolean}
-         */
-        hasSurrogatePair: function(str){
-            return _matches.partial(REGEXPS.SURROGATEPAIR, str);
-        },
-
-        /**
-         * Unicode6絵文字コード
-         * @param {string} str
-         * @returns {boolean}
-         */
-        hasUnicode6Emoji: function(str){
-            return _matches.partial(REGEXPS.UNICODE6EMOJI, str);
+            return chars;
         }
 
     };
