@@ -6,7 +6,15 @@
         var args = Array.prototype.slice.call(arguments);
         args.splice(0,2);
         it (args.toString() + ' to equal ' + result, function () {
-            expect(method.apply(this, args)).toEqual(result);
+            expect(method.apply(unikong, args)).toEqual(result);
+        });
+    }
+
+    function not (method, result, var_args) {
+        var args = Array.prototype.slice.call(arguments);
+        args.splice(0,2);
+        it (args.toString() + ' to not equal ' + result, function () {
+            expect(method.apply(unikong, args)).not.toEqual(result);
         });
     }
 
@@ -370,11 +378,17 @@
 
     describe('hasUnicode6Emoji', function() {
         equal.call(this, unikong.hasUnicode6Emoji, true, '\uD83D\uDE01');
-        equal.call(this, unikong.hasUnicode6Emoji, true, '\uD83D\uDEC0');
-        equal.call(this, unikong.hasUnicode6Emoji, true, '\uD83C\uDDEF');
+        equal.call(this, unikong.hasUnicode6Emoji, true, '＊\uD83D\uDEC0＊');
+        equal.call(this, unikong.hasUnicode6Emoji, true, '\uD83C\uDDEF__\uD83D\uDEC0');
         equal.call(this, unikong.hasUnicode6Emoji, true, '\u2702');
         equal.call(this, unikong.hasUnicode6Emoji, false, '＠');
         equal.call(this, unikong.hasUnicode6Emoji, false, '☭');
+    });
+
+    describe('charArray', function() {
+        equal.call(this, unikong.charArray, ['1','a','@'], '1a@');
+        equal.call(this, unikong.charArray, ['1', '2', 'A', 'あ', '𡉴', '𡧃', '龠', '𡼞'], '12Aあ𡉴𡧃龠𡼞');
+        not.call(this, unikong.charArray, [1,2,3,4,5], '012345');
     });
 
 })();
