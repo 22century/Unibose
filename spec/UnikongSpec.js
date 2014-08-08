@@ -4,7 +4,7 @@
 
     describe('count', function () {
 
-        it('surrogatepair', function () {
+        it('to be truthy.', function () {
             expect(unikong.count('𡉴𡉴𡉴\nあ𡉴')).toBe(6);
         });
 
@@ -544,19 +544,19 @@
 
     });
 
-//    describe('hasLineBreak', function() {
-//
-//        it('to be truthy.', function() {
-//            expect(unikong.hasLineBreak('\n')).toBe(true);
-//            expect(unikong.hasLineBreak('\r\n')).toBe(true);
-//            expect(unikong.hasLineBreak('A\nB')).toBe(true);
-//        });
-//
-//        it('to be falsy.', function() {
-//            expect(unikong.hasLineBreak('\t')).toBe(false);
-//        });
-//
-//    });
+    describe('hasLineBreak', function() {
+
+        it('to be truthy.', function() {
+            expect(unikong.hasLineBreak('\n')).toBe(true);
+            expect(unikong.hasLineBreak('\r\n')).toBe(true);
+            expect(unikong.hasLineBreak('A\nB')).toBe(true);
+        });
+
+        it('to be falsy.', function() {
+            expect(unikong.hasLineBreak('\t')).toBe(false);
+        });
+
+    });
 
     describe('hasCyrillic', function() {
 
