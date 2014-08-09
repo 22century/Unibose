@@ -614,6 +614,43 @@
             return ret.join('');
         },
 
+        toHiragana: function (str) {
+
+            if (!_matches.partial(REGEXPS.KATANAKA, str)) {
+                return str;
+            }
+
+            var ret = [], chr;
+
+            for (var i = 0, l = str.length; i < l; i++) {
+                chr = str.charAt(i);
+                if (_matches.perfect(REGEXPS.KATANAKA, chr)) {
+                    chr = String.fromCharCode(chr.charCodeAt(0) - 96);
+                }
+                ret[ret.length] = chr;
+            }
+
+            return ret.join('');
+        },
+
+        toKatakana: function (str) {
+            if (!_matches.partial(REGEXPS.HIRAGANA, str)) {
+                return str;
+            }
+
+            var ret = [], chr;
+
+            for (var i = 0, l = str.length; i < l; i++) {
+                chr = str.charAt(i);
+                if (_matches.perfect(REGEXPS.HIRAGANA, chr)) {
+                    chr = String.fromCharCode(chr.charCodeAt(0) + 96);
+                }
+                ret[ret.length] = chr;
+            }
+
+            return ret.join('');
+        },
+
         /**
          * 改行コード正規化
          * @param {string} str

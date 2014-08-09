@@ -406,4 +406,19 @@
         equal.call(this, unikong.toHanDakuon, 'ぱぴぷぺぽパピプペポ', 'ぱぴぷぺぽハヒフヘホ');
     });
 
+    describe('toHiragana', function() {
+        equal.call(this, unikong.toHiragana, 'あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよらりるれろわゐゑをん', 'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヰヱヲン');
+        equal.call(this, unikong.toHiragana, 'ぁぃぅぇぉゕゖっゃゅょゎゔ', 'ァィゥェォヵヶッャュョヮヴ');
+        equal.call(this, unikong.toHiragana, 'がざだばぱゔ', 'ガザダバパヴ');
+        // equal.call(this, unikong.toHiragana, 'かきくけこ', 'ｶｷｸｹｺ');
+    });
+
+    describe('toKatakana', function() {
+        equal.call(this, unikong.toKatakana, 'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヰヱヲン', 'あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよらりるれろわゐゑをん');
+        equal.call(this, unikong.toKatakana, 'ァィゥェォヵヶッャュョヮヴ', 'ぁぃぅぇぉゕゖっゃゅょゎゔ');
+        equal.call(this, unikong.toKatakana, 'ガザダバパヴ', 'がざだばぱゔ');
+    });
+
+    console.log(unikong.charCodeArray('ぁぃぅぇぉゕ'));
+
 })();
