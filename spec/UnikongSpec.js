@@ -391,4 +391,19 @@
         not.call(this, unikong.charArray, [1,2,3,4,5], '012345');
     });
 
+    describe('charCodeArray', function() {
+        equal.call(this, unikong.charCodeArray, [ 49, 97, 64 ], '1a@');
+        equal.call(this, unikong.charCodeArray, [ 49, 50, 65, 12354, 55364, 56948, 55366, 56771, 40864, 55367, 57118 ], '12Aあ𡉴𡧃龠𡼞');
+    });
+
+    describe('toDakuon', function() {
+        equal.call(this, unikong.toDakuon, 'アイウエオガギグゲゴザジズゼゾダヂヅデドバビブベボ', 'アイウエオカキクケコサシスセソタチツテトハヒフヘホ');
+        equal.call(this, unikong.toDakuon, 'あいうえおがぎぐげござじずぜぞだぢづでどばびぶべぼ', 'あいうえおかきくけこさしすせそたちつてとはひふへほ');
+    });
+
+    describe('toHanDakuon', function() {
+        equal.call(this, unikong.toHanDakuon, 'かきくけこぱぴぷぺぽ', 'かきくけこはひふへほ');
+        equal.call(this, unikong.toHanDakuon, 'ぱぴぷぺぽパピプペポ', 'ぱぴぷぺぽハヒフヘホ');
+    });
+
 })();

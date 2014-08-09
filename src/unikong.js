@@ -68,6 +68,8 @@
         KATANAKA          : _objects.exps('[\u30A0-\u30FF]'),
         HANKANA           : _objects.exps('[\uFF65-\uFF9F]'),
         HALFWIDTH         : _objects.exps('[0-9a-zA-Z\u0020-\u007E\uFF61-\uFFDC\uFFE8-\uFFEE]'),
+        HAGYO             : _objects.exps('[\u306F\u3072\u3075\u3078\u307B\u30CF\u30D2\u30D5\u30D8\u30DB]'),
+        KASATAHA          : _objects.exps('[\u30AB\u30AD\u30AF\u30B1\u30B3\u30B5\u30B7\u30B9\u30BB\u30BD\u30BF\u30C1\u30C4\u30C6\u30C8\u30CF\u30D2\u30D5\u30D8\u30DB\u304B\u304D\u304F\u3051\u3053\u3055\u3057\u3059\u305B\u305D\u305F\u3061\u3064\u3066\u3068\u306F\u3072\u3075\u3078\u307B]'),
         FULLWIDTH         : _objects.exps('[^0-9a-zA-Z\u0020-\u007E\uFF61-\uFFDC\uFFE8-\uFFEE]'),
         CYRILLIC          : _objects.exps('[\u0400-\u052F\u2DE0-\u2DFF\uA640-\uA69F]'),
         BLANK             : _objects.exps('[\\s\u3000]'),
@@ -569,6 +571,50 @@
         },
 
         /**
+         * 濁音変換
+         */
+        toDakuon: function (str) {
+            if (!_matches.partial(REGEXPS.KASATAHA, str)) {
+                return str;
+            }
+
+            var ret = [], chr;
+
+            for (var i = 0, l = str.length; i < l; i++) {
+                chr = str.charAt(i);
+                if (_matches.perfect(REGEXPS.KASATAHA, chr)) {
+                    chr = String.fromCharCode(chr.charCodeAt(0) + 1);
+                }
+                ret[ret.length] = chr;
+            }
+
+            return ret.join('');
+        },
+
+        /**
+         * 半濁音変換
+         * @param {string} str
+         * @returns {string}
+         */
+        toHanDakuon: function (str) {
+            if (!_matches.partial(REGEXPS.HAGYO, str)) {
+                return str;
+            }
+
+            var ret = [], chr;
+
+            for (var i = 0, l = str.length; i < l; i++) {
+                chr = str.charAt(i);
+                if (_matches.perfect(REGEXPS.HAGYO, chr)) {
+                    chr = String.fromCharCode(chr.charCodeAt(0) + 2);
+                }
+                ret[ret.length] = chr;
+            }
+
+            return ret.join('');
+        },
+
+        /**
          * 改行コード正規化
          * @param {string} str
          * @param {string} breakCode... 置換する改行コード（省略可）
@@ -650,9 +696,9 @@
                 chars = Array.prototype.slice.call(str);
             } else {
                 for (var i = 0, l = str.length; i < l; i++) {
-                    cha = str[i];
+                    cha = str.charAt(i);
                     if (high.test(cha) && i < l - 1) {
-                        if (low.test(str[i + 1])) {
+                        if (low.test(str.charAt(i + 1))) {
                             chars[chars.length] = String.fromCharCode(str.charCodeAt(i), str.charCodeAt(i + 1));
                             ++i;
                         }
@@ -663,6 +709,19 @@
             }
 
             return chars;
+        },
+
+        /**
+         * charCodeの配列を作成
+         * @param {string} str
+         * @returns {Array}
+         */
+        charCodeArray: function (str) {
+            var charCodes = [];
+            for (var i = 0, l = str.length; i < l; i++) {
+                charCodes[charCodes.length] = str.charCodeAt(i);
+            }
+            return charCodes;
         }
 
     };
